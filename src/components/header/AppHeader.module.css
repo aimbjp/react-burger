@@ -1,0 +1,21 @@
+/* AppHeader.module.css */
+
+.header {
+    display: flex;
+    width: 80vw;
+    margin-left: 9vw;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.nav{
+    display: flex;
+}

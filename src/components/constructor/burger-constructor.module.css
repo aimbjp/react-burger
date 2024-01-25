@@ -1,0 +1,20 @@
+
+
+.burgerConstructor{
+    display: grid;
+    max-height: 740px;
+    gap: 16px;
+}
+
+.blocked{
+    height: 80px;
+    margin-left: 32px;
+}
+
+.price{
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    align-items: center;
+    gap: 5px;
+}

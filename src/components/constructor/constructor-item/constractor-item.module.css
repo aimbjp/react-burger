@@ -1,0 +1,13 @@
+.item{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.list{
+    display: grid;
+    gap: 16px;
+    overflow-y: auto;
+    height: 40vh;
+}

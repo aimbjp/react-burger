@@ -1,0 +1,14 @@
+.card{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 45%;
+    height: 100%;
+    text-align: center;
+}
+
+.price{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}

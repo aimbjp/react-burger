@@ -1,0 +1,9 @@
+.group{
+    max-width: 595px;
+}
+
+.ingredientList{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
