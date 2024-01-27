@@ -4,6 +4,13 @@ import ConstructorList from "./constructor-item/constructor-list";
 import styles from './burger-constructor.module.css';
 import PropTypes from "prop-types";
 
+const fakeBun = {
+    text: "Краторная булка N-200i (верх)",
+    price: 50,
+    thumbnail: null
+}
+
+
 function BurgerConstructor(props){
     return(
         <section className={`${styles.burgerConstructor} pt-25 pb-10`}>
@@ -16,38 +23,7 @@ function BurgerConstructor(props){
                     extraClass={styles.blocked}
                 />
 
-                <ConstructorList chosenIngredients={[{
-                    text: "Краторная булка N-200i (верх)",
-                    price: 50,
-                    thumbnail: null
-                },
-                    {
-                        text: "Краторная булка N-200i (верх)",
-                        price: 50,
-                        thumbnail: null
-                    },
-                    {
-                        text: "Краторная булка N-200i (верх)",
-                        price: 50,
-                        thumbnail: null
-                    },
-                    {
-                        text: "Краторная булка N-200i (верх)",
-                        price: 50,
-                        thumbnail: null
-                    },
-                    {
-                        text: "Краторная булка N-200i (верх)",
-                        price: 50,
-                        thumbnail: null
-                    },
-                    {
-                        text: "Краторная булка N-200i (верх)",
-                        price: 50,
-                        thumbnail: null
-                    }
-                    ]} />
-
+                <ConstructorList chosenIngredients={[fakeBun, fakeBun, fakeBun, fakeBun, fakeBun, fakeBun,]} />
                 <ConstructorElement
                     type="bottom"
                     isLocked={true}

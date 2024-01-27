@@ -7,20 +7,20 @@ class AppHeader extends React.Component {
         return (
             <header className={`pb-4 pt-4 ${styles.header}`}>
                 <nav className={`pl-5 pr-5 ${styles.nav}`}>
-                    <button className={`pr-2 ${styles.button}`} >
+                    <a className={`pr-2 ${styles.a}`} href="#" >
                         <BurgerIcon type="primary" />
                         <span className="pl-2 text text_type_main-default text_color_primary">Конструктор</span>
-                    </button>
-                    <button className={` ${styles.button}`}>
+                    </a>
+                    <a className={` ${styles.a}`} href="#" >
                         <ListIcon type="secondary" />
                         <span className="pl-2 text text_type_main-default text_color_inactive ">Лента заказов</span>
-                    </button>
+                    </a>
                 </nav>
                 <Logo />
-                <button className={`pl-5 pr-5 ${styles.button}`}>
+                <a className={`pl-5 pr-5 ${styles.a}`} href="#" >
                     <ProfileIcon type="secondary" />
                     <span className="pl-2 text text_type_main-default text_color_inactive " >Личный кабинет</span>
-                </button>
+                </a>
             </header>
         );
     }
