@@ -1,10 +1,16 @@
 import React from "react";
-import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import {CurrencyIcon, } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
 
 function IngredientCard (props) {
+    const handleClick = () => {
+        if (props.onClick) {
+            props.onClick();
+        }
+    };
+
     return(
-        <section className={styles.card}>
+        <section className={styles.card} onClick={handleClick}>
             <img src={props.image} className={`pl-4 pr-4`} alt={props.name} />
             <p className={`text text_type_digits-default ${styles.price} pb-1 pt-1`}>
                 <span className={`pr-1`}>{props.price}</span>

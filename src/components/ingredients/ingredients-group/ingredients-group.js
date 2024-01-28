@@ -13,6 +13,7 @@ function IngredientsGroup(props){
                         name={item.name}
                         image={item.image}
                         price={item.price}
+                        onClick={() => props.onCardClick(item)}
                     />
                 ))}
             </div>

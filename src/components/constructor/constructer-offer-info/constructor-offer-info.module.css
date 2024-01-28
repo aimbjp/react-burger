@@ -1,0 +1,13 @@
+.offer_info{
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+.icon {
+    transform: scale(2.5);
+}
+
+.offer_id {
+    text-shadow: 4px 3px 50px rgba(76, 76, 176, 0.8);
+}
