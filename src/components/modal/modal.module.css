@@ -1,9 +1,14 @@
 .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #1c1c21;
-    z-index: 10001;
     border-radius: 25px;
-    min-width: 600px;
+    width: 600px;
+    z-index: 10001;
 }
+
 
 .header{
     display: flex;

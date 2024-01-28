@@ -31,7 +31,7 @@ const Modal = ({ title, children, onClose }) => {
 
 
     return ReactDOM.createPortal(
-        <ModalOverlay onClick={handleOverlayClick}>
+        <>
             <section className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <section className={`${styles.header} pr-10 pl-10`}>
                     <h2 className="text text_type_main-large">{title}</h2>
@@ -41,7 +41,8 @@ const Modal = ({ title, children, onClose }) => {
                     {children}
                 </section>
             </section>
-        </ModalOverlay>,
+    <ModalOverlay onClick={handleOverlayClick} />
+        </>,
         modalRoot
     );
 };
