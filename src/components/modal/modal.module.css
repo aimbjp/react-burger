@@ -1,0 +1,22 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1c1c21;
+    border-radius: 25px;
+    width: 600px;
+    z-index: 10001;
+}
+
+
+.header{
+    display: flex;
+    align-items: center;
+    height: 120px;
+    justify-content: space-between;
+}
+
+.close_button{
+    cursor: pointer;
+}

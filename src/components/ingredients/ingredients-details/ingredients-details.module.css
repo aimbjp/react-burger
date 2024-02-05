@@ -1,0 +1,17 @@
+.details{
+    display: grid;
+    justify-items: center;
+}
+
+.list_energy_value{
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style-type: none;
+}
+
+.list_energy_value__element{
+    display: grid;
+    justify-items: center;
+}

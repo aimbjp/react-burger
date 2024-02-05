@@ -4,8 +4,24 @@ import IngredientsGroup from "./ingredients-group/ingredients-group";
 import styles from './BurgerIngredients.module.css';
 import PropTypes from "prop-types";
 import ingredientTypes from "../../utils/ingredientTypes";
+import Modal from "../modal/modal";
+import IngredientsDetails from "./ingredients-details/ingredients-details";
 
 const BurgerIngredients = (props) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [activeIngredient, setActiveIngredient] = useState(null);
+
+    const handleCardClick = (ingredient) => {
+        setActiveIngredient(ingredient);
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setActiveIngredient(null);
+    };
+
+
     const [activeTab, setActiveTab] = useState("buns");
 
     const refs = {
@@ -52,15 +68,20 @@ const BurgerIngredients = (props) => {
             </section>
             <ul className={` ${styles.groups} custom-scroll`}>
                 <li ref={refs.buns}>
-                    <IngredientsGroup value={'Булки'} items={filteredBuns}/>
+                    <IngredientsGroup value={'Булки'} items={filteredBuns} onCardClick={handleCardClick} />
                 </li>
                 <li ref={refs.sauces}>
-                    <IngredientsGroup value={'Соусы'} items={filteredSauces}/>
+                    <IngredientsGroup value={'Соусы'} items={filteredSauces} onCardClick={handleCardClick} />
                 </li>
                 <li ref={refs.fillings}>
-                    <IngredientsGroup value={'Начинки'} items={filteredFillings}/>
+                    <IngredientsGroup value={'Начинки'} items={filteredFillings} onCardClick={handleCardClick} />
                 </li>
             </ul>
+            {modalOpen && (
+                <Modal title="Детали ингредиента" onClose={handleCloseModal}>
+                    <IngredientsDetails activeIngredient={activeIngredient} />
+                </Modal>
+            )}
         </section>
     );
 };
