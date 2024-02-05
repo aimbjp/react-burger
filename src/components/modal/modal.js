@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from './modal-overlay/modal-overlay';
@@ -12,36 +12,32 @@ const Modal = ({ title, children, onClose }) => {
         onClose();
     };
 
-    const handleOverlayClick = () => {
-        onClose();
-    };
-
-    const handleKeyDown = useCallback((e) => {
-        if (e.key === 'Escape') {
-            onClose();
-        }
-    }, [onClose]);
-
     useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        };
+
         document.addEventListener('keydown', handleKeyDown);
+
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [handleKeyDown]);
-
+    }, [onClose]);
 
     return ReactDOM.createPortal(
         <>
-            <section className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                <section className={`${styles.header} pr-10 pl-10`}>
-                    <h2 className="text text_type_main-large">{title}</h2>
-                    <CloseIcon type="primary"  onClick={handleCloseClick} />
-                </section>
-                <section className={styles.content}>
+            <ModalOverlay onClick={handleCloseClick} />
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                <div className={`${styles.header} pr-10 pl-10`}>
+                    <h1 className="text text_type_main-large">{title}</h1>
+                    <CloseIcon type="primary" onClick={handleCloseClick} />
+                </div>
+                <div className={styles.content}>
                     {children}
-                </section>
-            </section>
-    <ModalOverlay onClick={handleOverlayClick} />
+                </div>
+            </div>
         </>,
         modalRoot
     );
