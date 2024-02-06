@@ -3,7 +3,8 @@ import styles from './App.module.css';
 import AppHeader from "./components/header/AppHeader";
 import BurgerIngredients from "./components/ingredients/BurgerIngredients";
 import BurgerConstructor from "./components/constructor/BurgerConstructor";
-import {fetchIngredients} from './api/api-ingredients';
+import {fetchIngredients} from './services/api/api-norma';
+import {IngredientContext} from "./services/context/ingredient-context";
 
 function App() {
     const [ingredients, setIngredients] = useState([]);
@@ -16,13 +17,17 @@ function App() {
             });
     }, []);
 
+    console.log(ingredients);
+
     return (
         <>
             <AppHeader />
             <div id="modal-root"></div>
             <main className={styles.App}>
                 <BurgerIngredients ingredients={ingredients} />
-                <BurgerConstructor ingredients={ingredients} />
+                <IngredientContext.Provider value={ingredients}>
+                    <BurgerConstructor/>
+                </IngredientContext.Provider>
             </main>
         </>
     );

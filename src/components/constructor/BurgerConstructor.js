@@ -1,26 +1,69 @@
-import React, {useState} from "react";
+import React, {useState, useContext, useReducer, useEffect, useMemo} from "react";
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import ConstructorList from "./constructor-item/constructor-list";
 import styles from './burger-constructor.module.css';
-import PropTypes from "prop-types";
 import Modal from "../modal/modal";
 import ConstructorOfferInfo from "./constructer-offer-info/constructor-offer-info";
-import ingredientType from "../../utils/ingredientTypes";
+import {IngredientContext} from "../../services/context/ingredient-context"
+import { fetchOrderID} from "../../services/api/api-norma";
 
-const fakeBun = {
-    text: "Краторная булка N-200i (верх)",
-    price: 50,
-    thumbnail: "https://code.s3.yandex.net/react/code/bun-02.png"
+
+function reducerCostOrder(state, action){
+    switch (action.type) {
+        // in future can be separated
+        // add for adding some ingredients cost
+        // remove for remove some
+        case "add":
+            return {costOrder: action.payload};
+        case "remove":
+            return {costOrder: action.payload};
+        default:
+            throw new Error(`Wrong type of action: ${action.type}`);
+    }
 }
 
-const fakeOfferID = "034536";
+function calculateCostOrder(bun, ingredients) {
+    const bunCost = bun.price * 2;
+    const ingredientsCost = ingredients.reduce((acc, ing) => acc + ing.price, 0);
+    return bunCost + ingredientsCost;
+}
 
-function BurgerConstructor(props){
+const initialStateCostOrder = {costOrder: 0};
+
+function BurgerConstructor(){
     const [modalOpen, setModalOpen] = useState(false);
     const [offerID, setOfferID] = useState(null);
 
-    const handleOfferClick = (ingredient) => {
-        setOfferID(ingredient);
+    const ingredients = useContext(IngredientContext);
+
+    const chosenBun = ingredients[7]; //0 or 7
+    const chosenIngredients = useMemo(() => {
+        return [ingredients[3], ingredients[5], ingredients[3], ingredients[5]];
+    }, [ingredients]);
+
+    const [costOrder, dispatchCostOrder] = useReducer(reducerCostOrder,  initialStateCostOrder, undefined)
+
+    useEffect(() => {
+        if (ingredients.length > 0) {
+            const cost = calculateCostOrder(chosenBun, chosenIngredients);
+            dispatchCostOrder({type: "add", payload: cost});
+        }
+    }, [ingredients.length, chosenBun, chosenIngredients]);
+
+    const handleOfferClick = () => {
+        const chosenBunId = chosenBun._id;
+        const chosenIngredientsIds = chosenIngredients.map(ing => ing._id);
+        const ingredientsIdsArray = [chosenBunId, ...chosenIngredientsIds];
+
+        const orderDetails = JSON.stringify({ ingredients: ingredientsIdsArray });
+
+
+        fetchOrderID(orderDetails)
+            .then(data => setOfferID(data.order.number))
+            .catch(error => {
+                console.error('Ошибка при получении данных:', error);
+            });
+
         setModalOpen(true);
     };
 
@@ -29,32 +72,35 @@ function BurgerConstructor(props){
         setOfferID(null);
     };
 
+
     return(
         <section className={`${styles.burgerConstructor} pt-25 pb-10`}>
-                <ConstructorElement
-                    type="top"
-                    isLocked={true}
-                    text="Краторная булка N-200i (верх)"
-                    price={200}
-                    thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-                    extraClass={styles.blocked}
-                />
+            {ingredients.length > 0 && <ConstructorElement
+                type="top"
+                isLocked={true}
+                text={chosenBun.name +" (верх)"}
+                price={chosenBun.price}
+                thumbnail={chosenBun.image}
+                extraClass={styles.blocked}
+            />}
 
-                <ConstructorList chosenIngredients={[fakeBun, fakeBun, fakeBun, fakeBun, fakeBun, fakeBun,]} />
-                <ConstructorElement
-                    type="bottom"
-                    isLocked={true}
-                    text="Краторная булка N-200i (низ)"
-                    price={200}
-                    thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-                    extraClass={styles.blocked}
-                />
+                <ConstructorList chosenIngredients={ingredients.length > 0 ? chosenIngredients : []} />
+
+
+            {ingredients.length > 0 && <ConstructorElement
+                type="bottom"
+                isLocked={true}
+                text={chosenBun.name +" (низ)"}
+                price={chosenBun.price}
+                thumbnail={chosenBun.image}
+                extraClass={styles.blocked}
+            />}
             <section className={styles.price}>
                 <span className={`${styles.price} pr-6`}>
-                    <p className="text text_type_digits-medium">610</p>
+                    <p className="text text_type_digits-medium">{costOrder.costOrder}</p>
                     <CurrencyIcon type="primary" />
                 </span>
-                <Button htmlType="button" type="primary" size="large" onClick={() => {handleOfferClick(fakeOfferID)}}>
+                <Button htmlType="button" type="primary" size="large" onClick={() => {handleOfferClick()}}>
                     Оформить заказ
                 </Button>
             </section>
@@ -66,12 +112,6 @@ function BurgerConstructor(props){
         </section>
     );
 }
-
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(
-        ingredientType
-    ).isRequired,
-};
 
 
 export default BurgerConstructor;
