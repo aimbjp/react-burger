@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from './App.module.css';
-import AppHeader from "./components/header/AppHeader";
-import BurgerIngredients from "./components/ingredients/BurgerIngredients";
-import BurgerConstructor from "./components/constructor/BurgerConstructor";
-import {fetchIngredients} from './api/api-ingredients';
+import AppHeader from "./components/header/app-header";
+import BurgerIngredients from "./components/ingredients/burger-ingredients";
+import BurgerConstructor from "./components/constructor/burger-constructor";
+import {fetchIngredients} from './services/api/api-norma';
+import {IngredientContext} from "./services/context/ingredient-context";
 
 function App() {
     const [ingredients, setIngredients] = useState([]);
@@ -19,10 +20,12 @@ function App() {
     return (
         <>
             <AppHeader />
-            <div id="modal-root"></div>
+            {/*<div id="modal-root"></div>*/}
             <main className={styles.App}>
                 <BurgerIngredients ingredients={ingredients} />
-                <BurgerConstructor ingredients={ingredients} />
+                <IngredientContext.Provider value={ingredients}>
+                    <BurgerConstructor/>
+                </IngredientContext.Provider>
             </main>
         </>
     );

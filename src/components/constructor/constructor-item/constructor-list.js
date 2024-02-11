@@ -10,9 +10,9 @@ function ConstructorList (props){
                 <div key={index} className={styles.item}>
                     <DragIcon type="primary" />
                     <ConstructorElement
-                        text={ingredient.text}
+                        text={ingredient.name}
                         price={ingredient.price}
-                        thumbnail={ingredient.thumbnail}
+                        thumbnail={ingredient.image}
                     />
                 </div>
             ))}

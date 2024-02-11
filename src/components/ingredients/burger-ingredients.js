@@ -1,9 +1,9 @@
 import React, { useState, useRef, useMemo } from "react";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
-import styles from './BurgerIngredients.module.css';
+import styles from './burger-ingredients.module.css';
 import PropTypes from "prop-types";
-import ingredientTypes from "../../utils/ingredientTypes";
+import ingredientTypes from "../../utils/ingredient-types";
 import Modal from "../modal/modal";
 import IngredientsDetails from "./ingredients-details/ingredients-details";
 
