@@ -1,10 +1,10 @@
-import React, {useState, useContext, useReducer, useEffect, useMemo} from "react";
+import React, { useState, useContext, useReducer, useEffect, useMemo } from "react";
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import ConstructorList from "./constructor-item/constructor-list";
 import styles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import ConstructorOfferInfo from "./constructer-offer-info/constructor-offer-info";
-import {IngredientContext} from "../../services/context/ingredient-context"
+import { IngredientContext } from "../../services/context/ingredient-context"
 import { fetchOrderID} from "../../services/api/api-norma";
 
 
