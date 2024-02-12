@@ -15,7 +15,7 @@ export const fetchIngredients = () => {
     return request(`${baseUrl}/ingredients`);
 };
 
-export const fetchOrderID = (orderDetails) =>{
+export const fetchOrder = (orderDetails) =>{
     return request(`${baseUrl}/orders`, {
         method: 'POST',
         headers:{

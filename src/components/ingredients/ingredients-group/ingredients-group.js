@@ -14,6 +14,8 @@ function IngredientsGroup(props){
                         image={item.image}
                         price={item.price}
                         onClick={() => props.onCardClick(item)}
+                        id={item._id}
+                        type={item.type}
                     />
                 ))}
             </div>
