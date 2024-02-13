@@ -1,14 +1,18 @@
 import React, {useEffect, useState} from "react";
 import { CurrencyIcon, Counter, } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
+import {GET_ACTIVE_INGREDIENT} from "../../../services/actions/ingredients";
+import PropTypes from "prop-types";
 
 function IngredientCard (props) {
-    const handleClick = () => {
-        if (props.onClick) {
-            props.onClick();
-        }
+    const dispatch = useDispatch();
+
+    const ingredients = useSelector(state => state.ingredientsReducer.ingredients);
+
+    const handleCardClick = () => {
+        dispatch({type: GET_ACTIVE_INGREDIENT, ingredient: ingredients.find(ing => ing._id === props.id)})
     };
 
     const [count, setCount] = useState(0);
@@ -21,7 +25,7 @@ function IngredientCard (props) {
     }, [constructorIngredients, constructorBun, props.id]);
 
 
-    const [{ isDragging }, dragRef] = useDrag(() => ({
+    const [, dragRef] = useDrag(() => ({
         type: 'ingredient',
         item: { id: props.id, type: props.type },
         collect: (monitor) => ({
@@ -30,7 +34,7 @@ function IngredientCard (props) {
     }));
 
     return(
-        <section className={styles.card} onClick={handleClick} ref={dragRef}>
+        <section className={styles.card} onClick={handleCardClick} ref={dragRef}>
             <img src={props.image} className={`pl-4 pr-4`} alt={props.name} />
             <p className={`text text_type_digits-default ${styles.price} pb-1 pt-1`}>
                 <span className={`pr-1`}>{props.price}</span>
@@ -45,5 +49,13 @@ function IngredientCard (props) {
         </section>
     )
 }
+
+IngredientCard.propTypes = {
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+};
 
 export default IngredientCard;

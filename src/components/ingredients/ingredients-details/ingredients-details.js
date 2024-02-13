@@ -7,7 +7,7 @@ export default function IngredientsDetails () {
 
     return(
         <section className={styles.details}>
-            <img src={activeIngredient.image_large} alt="Картинка ингредиента"/>
+            <img src={activeIngredient.image_large} alt={activeIngredient.name}/>
             <h3 className="text text_type_main-medium pt-4">{activeIngredient.name}</h3>
             <ul className={`${styles.list_energy_value} pb-15 pt-8`}>
                 <li className={styles.list_energy_value__element}>

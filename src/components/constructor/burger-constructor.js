@@ -1,10 +1,10 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useMemo } from "react";
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import ConstructorList from "./constructor-list/constructor-list";
 import styles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import ConstructorOfferInfo from "./constructer-offer-info/constructor-offer-info";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     addIngredientToConstructor,
     COLLAPSE_ORDER,
@@ -12,25 +12,11 @@ import {
 } from "../../services/actions/ingredients";
 import {useDrop} from "react-dnd";
 
-
-function reducerCostOrder(state, action){
-    switch (action.type) {
-        case "add":
-            return {costOrder: action.payload};
-        case "remove":
-            return {costOrder: action.payload};
-        default:
-            throw new Error(`Wrong type of action: ${action.type}`);
-    }
-}
-
 function calculateCostOrder(bun, ingredients) {
-    const bunCost = bun.price * 2;
-    const ingredientsCost = ingredients.reduce((acc, ing) => acc + ing.price, 0);
+    const bunCost = bun ? bun.price * 2 : 0;
+    const ingredientsCost = ingredients.length > 0 ? ingredients.reduce((acc, ing) => acc + ing.price, 0) : 0;
     return bunCost + ingredientsCost;
 }
-
-const initialStateCostOrder = {costOrder: 0};
 
 function BurgerConstructor(){
 
@@ -41,24 +27,10 @@ function BurgerConstructor(){
     const chosenBun = useSelector(store => store.ingredientsReducer.constructorIngredients.bun); //0 or 7
     const chosenIngredients = useSelector(store => store.ingredientsReducer.constructorIngredients.ingredients) ;
 
-    const [costOrder, dispatchCostOrder] = useReducer(reducerCostOrder,  initialStateCostOrder, undefined)
 
-    useEffect(() => {
-        if (!chosenBun && ingredients.length > 0) {
-            const firstBun = ingredients.find(ingredient => ingredient.type === 'bun');
-            if (firstBun) {
-                dispatch(addIngredientToConstructor(firstBun));
-            }
-        }
-    }, [chosenBun, ingredients, dispatch]);
-
-
-    useEffect(() => {
-        if (ingredients.length > 0 && chosenBun) {
-            const cost = calculateCostOrder(chosenBun, chosenIngredients);
-            dispatchCostOrder({type: "add", payload: cost});
-        }
-    }, [ingredients.length, chosenBun, chosenIngredients]);
+    const costOrder = useMemo(()=> {
+        return calculateCostOrder(chosenBun, chosenIngredients)
+    }, [chosenBun, chosenIngredients])
 
 
     const handleOfferClick = () => {
@@ -74,7 +46,14 @@ function BurgerConstructor(){
             dispatch(getOrder(orderDetails));
         }
         else {
-            dispatch(addIngredientToConstructor(ingredients[1]));
+            if (ingredients.length > 0) dispatch(addIngredientToConstructor(ingredients[1]));
+
+            if (!chosenBun && ingredients.length > 0) {
+                const firstBun = ingredients.find(ingredient => ingredient.type === 'bun');
+                if (firstBun) {
+                    dispatch(addIngredientToConstructor(firstBun));
+                }
+            }
         }
     };
 
@@ -94,16 +73,21 @@ function BurgerConstructor(){
 
     return(
         <section className={`${styles.burgerConstructor} pt-25 pb-10`} ref={dropRef}>
-            {chosenBun && <ConstructorElement
+            {(chosenBun
+                && <ConstructorElement
                 type="top"
                 isLocked={true}
                 text={chosenBun.name +" (верх)"}
                 price={chosenBun.price}
                 thumbnail={chosenBun.image}
-                extraClass={styles.blocked}
-            />}
+                extraClass={styles.blocked} />)
+                || <span className={'text text_type_main-medium'}>Перенесите булку</span>
+            }
 
-                <ConstructorList />
+            { (chosenIngredients.length > 0
+                && <ConstructorList/>)
+                || <span className={'text text_type_main-medium'}>А сюда ингредиенты</span>
+            }
 
             {chosenBun && <ConstructorElement
                 type="bottom"
@@ -115,7 +99,7 @@ function BurgerConstructor(){
             />}
             <section className={styles.price}>
                 <span className={`${styles.price} pr-6`}>
-                    <p className="text text_type_digits-medium">{costOrder.costOrder}</p>
+                    <p className="text text_type_digits-medium">{costOrder}</p>
                     <CurrencyIcon type="primary" />
                 </span>
                 <Button htmlType="button" type="primary" size="large" onClick={() => {handleOfferClick()}}>
@@ -124,7 +108,7 @@ function BurgerConstructor(){
             </section>
             {modalOpen && (
                 <Modal title="" onClose={handleCloseModal}>
-                    <ConstructorOfferInfo/>
+                    <ConstructorOfferInfo />
                 </Modal>
             )}
         </section>

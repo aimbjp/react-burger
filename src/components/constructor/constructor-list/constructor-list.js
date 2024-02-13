@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { moveConstructorIngredient } from "../../../services/actions/ingredients";
-import styles from './constructor-item.module.css';
+import styles from './constructor-list.module.css';
 import { ConstructorItem } from '../constructor-item/constructor-item';
 
 function ConstructorList() {
