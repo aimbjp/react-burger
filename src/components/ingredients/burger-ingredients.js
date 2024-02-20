@@ -1,28 +1,18 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
 import styles from './burger-ingredients.module.css';
-import PropTypes from "prop-types";
-import ingredientTypes from "../../utils/ingredient-types";
 import Modal from "../modal/modal";
 import IngredientsDetails from "./ingredients-details/ingredients-details";
+import { useDispatch, useSelector } from "react-redux";
+import {  COLLAPSE_ACTIVE_INGREDIENT } from "../../services/actions/ingredients";
 
-const BurgerIngredients = (props) => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [activeIngredient, setActiveIngredient] = useState(null);
+const BurgerIngredients = () => {
 
-    const handleCardClick = (ingredient) => {
-        setActiveIngredient(ingredient);
-        setModalOpen(true);
-    };
+    const dispatch = useDispatch();
 
-    const handleCloseModal = () => {
-        setModalOpen(false);
-        setActiveIngredient(null);
-    };
+    const modalOpen = useSelector(store => store.ingredientsReducer.modalIngredientOpen);
 
-
-    const [activeTab, setActiveTab] = useState("buns");
 
     const refs = {
         "buns": useRef(null),
@@ -30,18 +20,56 @@ const BurgerIngredients = (props) => {
         "fillings": useRef(null),
     }
 
+    const ingredientsContainerRef = useRef(null);
+
+    const [activeTab, setActiveTab] = useState("buns");
+
+
+
+    const handleCloseModal = () => {
+        dispatch({type: COLLAPSE_ACTIVE_INGREDIENT})
+    };
+
     const handleTabClick = (value) => {
         setActiveTab(value);
         refs[value].current.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const filteredBuns = useMemo(() => props.ingredients.filter(item => item.type === 'bun'), [props.ingredients]);
-    const filteredSauces = useMemo(() => props.ingredients.filter(item => item.type === 'sauce'), [props.ingredients]);
-    const filteredFillings = useMemo(() => props.ingredients.filter(item => item.type === 'main'), [props.ingredients]);
+    useEffect(() => {
+        const handleScroll = () => {
+            const containerRect = ingredientsContainerRef.current.getBoundingClientRect();
+
+            const bunsRect = refs.buns.current.getBoundingClientRect();
+            const saucesRect = refs.sauces.current.getBoundingClientRect();
+            const fillingsRect = refs.fillings.current.getBoundingClientRect();
+
+            const distances = {
+                buns: Math.abs(bunsRect.top - containerRect.top) + Math.abs(bunsRect.left - containerRect.left),
+                sauces: Math.abs(saucesRect.top - containerRect.top) + Math.abs(saucesRect.left - containerRect.left),
+                fillings: Math.abs(fillingsRect.top - containerRect.top) + Math.abs(fillingsRect.left - containerRect.left),
+            };
+
+            let closest = 'buns';
+            let minDistance = Number.MAX_VALUE;
+            Object.entries(distances).forEach(([key, value]) => {
+                if (value < minDistance) {
+                    minDistance = value;
+                    closest = key;
+                }
+            });
+
+            setActiveTab(closest);
+        };
+
+        const container = ingredientsContainerRef.current;
+        container.addEventListener('scroll', handleScroll);
+
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, [refs.buns, refs.fillings, refs.sauces]);
 
 
     return (
-        <section className={`${styles.burgerIngredients} pt-10 pr-10`}>
+        <section className={`${styles.burgerIngredients} pt-10 pr-10`} >
             <h2 className="text text_type_main-large">Соберите бургер</h2>
             <section className={`${styles.tab} pt-5 `}>
                 <Tab
@@ -66,28 +94,26 @@ const BurgerIngredients = (props) => {
                     Начинки
                 </Tab>
             </section>
-            <ul className={` ${styles.groups} custom-scroll`}>
+            <ul className={` ${styles.groups} custom-scroll`} ref={ingredientsContainerRef} >
                 <li ref={refs.buns}>
-                    <IngredientsGroup value={'Булки'} items={filteredBuns} onCardClick={handleCardClick} />
+                    <IngredientsGroup value={'Булки'} type={'bun'} />
                 </li>
                 <li ref={refs.sauces}>
-                    <IngredientsGroup value={'Соусы'} items={filteredSauces} onCardClick={handleCardClick} />
+                    <IngredientsGroup value={'Соусы'} type={'sauce'} />
                 </li>
                 <li ref={refs.fillings}>
-                    <IngredientsGroup value={'Начинки'} items={filteredFillings} onCardClick={handleCardClick} />
+                    <IngredientsGroup value={'Начинки'} type={'main'} />
                 </li>
             </ul>
             {modalOpen && (
                 <Modal title="Детали ингредиента" onClose={handleCloseModal}>
-                    <IngredientsDetails activeIngredient={activeIngredient} />
+                    <IngredientsDetails />
                 </Modal>
             )}
         </section>
     );
 };
 
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientTypes).isRequired,
-};
+
 
 export default BurgerIngredients;

@@ -5,10 +5,17 @@
     width: 45%;
     height: 100%;
     text-align: center;
+    position: relative;
 }
 
 .price{
     display: flex;
     justify-items: center;
     align-items: center;
+}
+
+.counter {
+    position: absolute;
+    top: 0;
+    right: 20px;
 }

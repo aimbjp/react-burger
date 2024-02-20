@@ -1,93 +1,95 @@
-import React, { useState, useContext, useReducer, useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import ConstructorList from "./constructor-item/constructor-list";
+import ConstructorList from "./constructor-list/constructor-list";
 import styles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import ConstructorOfferInfo from "./constructer-offer-info/constructor-offer-info";
-import { IngredientContext } from "../../services/context/ingredient-context"
-import { fetchOrderID} from "../../services/api/api-norma";
-
-
-function reducerCostOrder(state, action){
-    switch (action.type) {
-        // in future can be separated
-        // add for adding some ingredients cost
-        // remove for remove some
-        case "add":
-            return {costOrder: action.payload};
-        case "remove":
-            return {costOrder: action.payload};
-        default:
-            throw new Error(`Wrong type of action: ${action.type}`);
-    }
-}
+import { useDispatch, useSelector } from "react-redux";
+import {
+    addIngredientToConstructor,
+    COLLAPSE_ORDER,
+    getOrder,
+} from "../../services/actions/ingredients";
+import {useDrop} from "react-dnd";
 
 function calculateCostOrder(bun, ingredients) {
-    const bunCost = bun.price * 2;
-    const ingredientsCost = ingredients.reduce((acc, ing) => acc + ing.price, 0);
+    const bunCost = bun ? bun.price * 2 : 0;
+    const ingredientsCost = ingredients.length > 0 ? ingredients.reduce((acc, ing) => acc + ing.price, 0) : 0;
     return bunCost + ingredientsCost;
 }
 
-const initialStateCostOrder = {costOrder: 0};
-
 function BurgerConstructor(){
-    const [modalOpen, setModalOpen] = useState(false);
-    const [offerID, setOfferID] = useState(null);
 
-    const ingredients = useContext(IngredientContext);
+    const dispatch = useDispatch();
 
-    const chosenBun = ingredients[7]; //0 or 7
-    const chosenIngredients = useMemo(() => {
-        return [ingredients[3], ingredients[5], ingredients[3], ingredients[5]];
-    }, [ingredients]);
+    const ingredients = useSelector(store => store.ingredientsReducer.ingredients);
+    const modalOpen = useSelector(store => store.ingredientsReducer.modalOrderOpen);
+    const chosenBun = useSelector(store => store.ingredientsReducer.constructorIngredients.bun); //0 or 7
+    const chosenIngredients = useSelector(store => store.ingredientsReducer.constructorIngredients.ingredients) ;
 
-    const [costOrder, dispatchCostOrder] = useReducer(reducerCostOrder,  initialStateCostOrder, undefined)
 
-    useEffect(() => {
-        if (ingredients.length > 0) {
-            const cost = calculateCostOrder(chosenBun, chosenIngredients);
-            dispatchCostOrder({type: "add", payload: cost});
-        }
-    }, [ingredients.length, chosenBun, chosenIngredients]);
+    const costOrder = useMemo(()=> {
+        return calculateCostOrder(chosenBun, chosenIngredients)
+    }, [chosenBun, chosenIngredients])
+
 
     const handleOfferClick = () => {
-        const chosenBunId = chosenBun._id;
-        const chosenIngredientsIds = chosenIngredients.map(ing => ing._id);
-        const ingredientsIdsArray = [chosenBunId, ...chosenIngredientsIds];
 
-        const orderDetails = JSON.stringify({ ingredients: ingredientsIdsArray });
+        if (chosenIngredients.length > 0) {
+            const chosenBunId = chosenBun._id;
+            const chosenIngredientsIds = chosenIngredients.map(ing => ing._id);
+            const ingredientsIdsArray = [chosenBunId, ...chosenIngredientsIds];
+
+            const orderDetails = JSON.stringify({ingredients: ingredientsIdsArray});
 
 
-        fetchOrderID(orderDetails)
-            .then(data => setOfferID(data.order.number))
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+            dispatch(getOrder(orderDetails));
+        }
+        else {
+            if (ingredients.length > 0) dispatch(addIngredientToConstructor(ingredients[1]));
 
-        setModalOpen(true);
+            if (!chosenBun && ingredients.length > 0) {
+                const firstBun = ingredients.find(ingredient => ingredient.type === 'bun');
+                if (firstBun) {
+                    dispatch(addIngredientToConstructor(firstBun));
+                }
+            }
+        }
     };
 
     const handleCloseModal = () => {
-        setModalOpen(false);
-        setOfferID(null);
+        dispatch({type: COLLAPSE_ORDER})
     };
 
+    const [, dropRef] = useDrop({
+        accept: 'ingredient',
+        drop(item, monitor) {
+            const ingredientToAdd = ingredients.find(ing => ing._id === item.id);
+            if (ingredientToAdd) {
+                dispatch(addIngredientToConstructor(ingredientToAdd));
+            }
+        },
+    });
 
     return(
-        <section className={`${styles.burgerConstructor} pt-25 pb-10`}>
-            {ingredients.length > 0 && <ConstructorElement
+        <section className={`${styles.burgerConstructor} pt-25 pb-10`} ref={dropRef}>
+            {(chosenBun
+                && <ConstructorElement
                 type="top"
                 isLocked={true}
                 text={chosenBun.name +" (верх)"}
                 price={chosenBun.price}
                 thumbnail={chosenBun.image}
-                extraClass={styles.blocked}
-            />}
+                extraClass={styles.blocked} />)
+                || <span className={'text text_type_main-medium'}>Перенесите булку</span>
+            }
 
-                <ConstructorList chosenIngredients={ingredients.length > 0 ? chosenIngredients : []} />
+            { (chosenIngredients.length > 0
+                && <ConstructorList/>)
+                || <span className={'text text_type_main-medium'}>А сюда ингредиенты</span>
+            }
 
-
-            {ingredients.length > 0 && <ConstructorElement
+            {chosenBun && <ConstructorElement
                 type="bottom"
                 isLocked={true}
                 text={chosenBun.name +" (низ)"}
@@ -97,7 +99,7 @@ function BurgerConstructor(){
             />}
             <section className={styles.price}>
                 <span className={`${styles.price} pr-6`}>
-                    <p className="text text_type_digits-medium">{costOrder.costOrder}</p>
+                    <p className="text text_type_digits-medium">{costOrder}</p>
                     <CurrencyIcon type="primary" />
                 </span>
                 <Button htmlType="button" type="primary" size="large" onClick={() => {handleOfferClick()}}>
@@ -106,7 +108,7 @@ function BurgerConstructor(){
             </section>
             {modalOpen && (
                 <Modal title="" onClose={handleCloseModal}>
-                    <ConstructorOfferInfo offerId={offerID}/>
+                    <ConstructorOfferInfo />
                 </Modal>
             )}
         </section>
