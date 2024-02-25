@@ -68,6 +68,7 @@ export function ingredientsReducer(state = initialState, action) {
                 ...state,
                 modalOrderOpen: true,
                 orderRequest: true,
+                order: null,
             }
         }
         case GET_ORDER_SUCCESS: {
@@ -77,6 +78,7 @@ export function ingredientsReducer(state = initialState, action) {
                 orderRequest: false,
                 orderRequestFailed: false,
                 order: action.order,
+
             }
         }
         case GET_ORDER_FAILED: {
@@ -85,16 +87,21 @@ export function ingredientsReducer(state = initialState, action) {
                 modalOrderOpen: true,
                 orderRequest: false,
                 orderRequestFailed: true,
+                order: null,
             }
         }
         case COLLAPSE_ORDER: {
+            const newConstructorIngredients = !state.orderRequestFailed || state.order !== null
+                ? { bun: null, ingredients: [] }
+                : { ...state.constructorIngredients };
+
             return {
                 ...state,
                 modalOrderOpen: false,
                 orderRequest: false,
-                orderRequestFailed: false,
                 order: null,
-            }
+                constructorIngredients: newConstructorIngredients
+            };
         }
         case ADD_INGREDIENT_TO_CONSTRUCTOR: {
             return {

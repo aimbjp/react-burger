@@ -5,11 +5,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
 import {GET_ACTIVE_INGREDIENT} from "../../../services/actions/ingredients";
 import PropTypes from "prop-types";
+import {Link, useLocation} from "react-router-dom";
+
 
 function IngredientCard (props) {
     const dispatch = useDispatch();
+    const location = useLocation();
 
+    const ingredientId = props.id;
     const ingredients = useSelector(state => state.ingredientsReducer.ingredients);
+
 
     const handleCardClick = () => {
         dispatch({type: GET_ACTIVE_INGREDIENT, ingredient: ingredients.find(ing => ing._id === props.id)})
@@ -34,19 +39,21 @@ function IngredientCard (props) {
     }));
 
     return(
-        <section className={styles.card} onClick={handleCardClick} ref={dragRef}>
-            <img src={props.image} className={`pl-4 pr-4`} alt={props.name} />
-            <p className={`text text_type_digits-default ${styles.price} pb-1 pt-1`}>
-                <span className={`pr-1`}>{props.price}</span>
-                <CurrencyIcon type="primary" />
-            </p>
-            <h3 className="text text_type_main-default" style={{wordWrap: "break-word"}}>{props.name}</h3>
-            <div className={styles.counter}>
-                {
-                    count > 0 && <Counter count={count} size="default" extraClass="m-1" />
-                }
-            </div>
-        </section>
+        <Link key={ingredientId} to={`/ingredients/${ingredientId}`} state={ { background: location } } className={` text text_color_primary ${styles.list} `}>
+            <section className={styles.card} onClick={handleCardClick} ref={dragRef}>
+                <img src={props.image} className={`pl-4 pr-4`} alt={props.name} />
+                <p className={`text text_type_digits-default ${styles.price} pb-1 pt-1`}>
+                    <span className={`pr-1`}>{props.price}</span>
+                    <CurrencyIcon type="primary" />
+                </p>
+                <h3 className="text text_type_main-default " style={{wordWrap: "break-word"}}>{props.name}</h3>
+                <div className={styles.counter}>
+                    {
+                        count > 0 && <Counter count={count} size="default" extraClass="m-1" />
+                    }
+                </div>
+            </section>
+        </Link>
     )
 }
 
