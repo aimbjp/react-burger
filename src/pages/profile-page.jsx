@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import AppHeader from "../components/header/app-header";
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink } from "react-router-dom";
 import styles from './forms.module.css';
@@ -41,8 +40,6 @@ export default function ProfilePage() {
         }
     }, [email, name]);
 
-
-
     const handleProfile = (e) => {
         e.preventDefault();
 
@@ -78,7 +75,6 @@ export default function ProfilePage() {
 
     return(
         <>
-            <AppHeader />
             <main className={`text text_type_main-default ${styles.profile_main}`}>
                 <section className={styles.menu}>
                     <nav className={`text_type_main-medium ${styles.navigation}`}>

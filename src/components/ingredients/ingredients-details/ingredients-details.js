@@ -1,20 +1,11 @@
 import styles from './ingredients-details.module.css';
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import {getIngredients} from "../../../services/actions/ingredients";
+import { useSelector } from "react-redux";
 import {useParams} from "react-router-dom";
-import AppHeader from "../../header/app-header";
 
 export default function IngredientsDetails () {
-    const dispatch = useDispatch();
-    const ingredients = useSelector(store => store.ingredientsReducer.ingredients);
     let { ingredientId } = useParams();
+    const activeIngredient = useSelector(store => store.ingredientsReducer.ingredients).find(ing => ing._id === ingredientId);
 
-    useEffect(() => {
-        if (ingredients.length < 1) dispatch(getIngredients());
-    }, [])
-
-    const activeIngredient = ingredients.find(ing => ing._id === ingredientId);
 
     return(
         <>

@@ -1,5 +1,4 @@
 import React from 'react';
-import AppHeader from "../components/header/app-header";
 import BurgerIngredients from "../components/ingredients/burger-ingredients";
 import BurgerConstructor from "../components/constructor/burger-constructor";
 import { DndProvider } from 'react-dnd';
@@ -9,7 +8,6 @@ import styles from './home-page.module.css';
 export default function HomePage() {
     return (
         <>
-                <AppHeader />
                 <DndProvider backend={HTML5Backend}>
                     <main className={styles.Home}>
                         <BurgerIngredients />

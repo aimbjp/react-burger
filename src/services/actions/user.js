@@ -51,7 +51,7 @@ export function register (payload) {
         });
         fetchRegister(payload)
             .then(res => {
-                if (res && res.success) {
+                if ( res.success) {
                     dispatch({
                         type: REGISTER_SUCCESS,
                         email: res.user.email,
@@ -77,7 +77,7 @@ export function login (payload) {
         dispatch({type: AUTHORIZATION});
         fetchLogin(payload)
             .then(res => {
-                if (res && res.success){
+                if ( res.success){
                     dispatch({
                         type: AUTHORIZATION_SUCCESS,
                         email: res.user.email,
@@ -102,7 +102,7 @@ export function logout(payload) {
         dispatch({type: LOGOUT});
         fetchLogout(payload)
             .then(res => {
-                if (res && res.success) {
+                if ( res.success) {
                     dispatch({type: LOGOUT_SUCCESS});
                     localStorage.removeItem("refreshToken");
                     localStorage.removeItem("accessToken");
@@ -124,7 +124,7 @@ export function getUserInfo () {
 
         try {
             const res = await fetchGetUserInfo();
-            if (res && res.success) {
+            if ( res.success) {
                 dispatch({
                     type: GET_USER_INFO_SUCCESS,
                     email: res.user.email,
@@ -146,7 +146,7 @@ export function updateUserInfo (payload) {
 
         fetchUpdateUserInfo(payload)
             .then(res => {
-                if (res && res.success) {
+                if ( res.success) {
                     dispatch({
                         type: UPDATE_USER_INFO_SUCCESS,
                         email: res.user.email,
@@ -184,7 +184,7 @@ export const resetPassword = (payload, setErrorToken, setFlag) => async (dispatc
         dispatch({type: RESET_PASSWORD})
 
         const res = await fetchResetPassword(payload);
-        if (res && res.success) {
+        if ( res.success) {
             dispatch({type: RESET_PASSWORD_SUCCESS});
         } else {
             console.error('error: ', res.message);
@@ -206,7 +206,7 @@ export const checkEmailExist = (email) => {
 
         fetchForgotPassword(email)
             .then(res => {
-                if (res && res.success) {
+                if ( res.success) {
                     dispatch({type: CHECK_EMAIL_EXIST_SUCCESS});
                 } else {
                     console.error('error: ', res.message);

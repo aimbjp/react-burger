@@ -1,5 +1,4 @@
 import React from 'react';
-import AppHeader from "../components/header/app-header";
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './forms.module.css';
 import {useForm} from "../hooks/useForm";
@@ -36,7 +35,6 @@ export default function ResetPasswordPage() {
 
     return(
         <>
-            <AppHeader />
             <main className={styles}>
                 <form name="reset-password" className={styles.form} onSubmit={handleResetPassword}>
                     <h1 className={`text text_type_main-medium pb-6`}>Восстановление пароля</h1>

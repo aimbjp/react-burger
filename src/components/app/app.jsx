@@ -27,6 +27,7 @@ function App() {
 
     return (
         <>
+            <AppHeader/>
             <Routes location={ background || location }>
                 <Route path='/' element={<HomePage />}/>
                 <Route path='/login' element={ <OnlyUnAuth component={ <LoginPage /> } /> } />
@@ -35,7 +36,7 @@ function App() {
                 <Route path='/reset-password' element={ <OnlyUnAuth component={ <ResetPasswordPage /> } /> }/>
                 <Route path='/profile' element={<OnlyAuth component={<ProfilePage />} />}/>
                 <Route path='/profile/orders' element={<OnlyAuth component={<ProfilePage />} />}/>
-                <Route path='/ingredients/:ingredientId' element={<><AppHeader/> <IngredientsDetails /> </>}/>
+                <Route path='/ingredients/:ingredientId' element={<><IngredientsDetails /> </>}/>
                 <Route path='*' element={<HomePage />}/>
             </Routes>
             {background && (

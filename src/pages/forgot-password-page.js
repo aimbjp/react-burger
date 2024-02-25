@@ -1,5 +1,4 @@
 import React from 'react';
-import AppHeader from "../components/header/app-header";
 import { Button, EmailInput, } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, } from "react-router-dom";
 import styles from './forms.module.css';
@@ -21,7 +20,6 @@ const dispatch = useDispatch();
 
     return(
         <>
-            <AppHeader />
             <main className={styles}>
                 <form name="forgot-password" className={styles.form} onSubmit={handleForgotPassword}>
                     <h1 className={`text text_type_main-medium pb-6`}>Восстановление пароля</h1>

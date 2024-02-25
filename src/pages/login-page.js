@@ -1,5 +1,4 @@
 import React from 'react';
-import AppHeader from "../components/header/app-header";
 import {Button, EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {Link} from "react-router-dom";
 import styles from './forms.module.css';
@@ -21,7 +20,6 @@ export default function LoginPage() {
 
     return(
         <>
-            <AppHeader />
             <main className={styles}>
                 <form name="login" className={styles.form} onSubmit={handleLogin}>
                     <h1 className={`text text_type_main-medium pb-6`}>Вход</h1>
