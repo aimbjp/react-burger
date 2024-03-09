@@ -19,3 +19,9 @@
     top: 0;
     right: 20px;
 }
+
+.list {
+    text-decoration: none;
+    width: 45%;
+    height: 100%;
+}

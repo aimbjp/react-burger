@@ -2,17 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientsGroup from "./ingredients-group/ingredients-group";
 import styles from './burger-ingredients.module.css';
-import Modal from "../modal/modal";
-import IngredientsDetails from "./ingredients-details/ingredients-details";
-import { useDispatch, useSelector } from "react-redux";
-import {  COLLAPSE_ACTIVE_INGREDIENT } from "../../services/actions/ingredients";
 
 const BurgerIngredients = () => {
-
-    const dispatch = useDispatch();
-
-    const modalOpen = useSelector(store => store.ingredientsReducer.modalIngredientOpen);
-
 
     const refs = {
         "buns": useRef(null),
@@ -23,12 +14,6 @@ const BurgerIngredients = () => {
     const ingredientsContainerRef = useRef(null);
 
     const [activeTab, setActiveTab] = useState("buns");
-
-
-
-    const handleCloseModal = () => {
-        dispatch({type: COLLAPSE_ACTIVE_INGREDIENT})
-    };
 
     const handleTabClick = (value) => {
         setActiveTab(value);
@@ -105,11 +90,6 @@ const BurgerIngredients = () => {
                     <IngredientsGroup value={'Начинки'} type={'main'} />
                 </li>
             </ul>
-            {modalOpen && (
-                <Modal title="Детали ингредиента" onClose={handleCloseModal}>
-                    <IngredientsDetails />
-                </Modal>
-            )}
         </section>
     );
 };

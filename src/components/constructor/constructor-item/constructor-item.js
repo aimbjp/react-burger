@@ -5,7 +5,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import { removeIngredientFromConstructor } from "../../../services/actions/ingredients";
 import styles from './constructor-item.module.css';
 import PropTypes from "prop-types";
-import ingredientType from "../../../utils/ingredient-types";
+import ingredientType from "../../../utils/props/ingredient-types";
 
 export const ConstructorItem = ({ ingredient, index, moveIngredient }) => {
     const dispatch = useDispatch();
