@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {FormEvent, MutableRefObject, useEffect, useRef, useState} from 'react';
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink } from "react-router-dom";
 import styles from './forms.module.css';
@@ -6,32 +6,46 @@ import getClasses from "../utils/functions/getClassesColor";
 import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "../hooks/useForm";
 import {getUserInfo, logout, updateUserInfo} from "../services/actions/user";
+import {IRootState} from "../components/constructor/types-constructor";
+
+interface ProfileForm {
+    email?: string;
+    name?: string;
+    password?: string;
+}
 
 export default function ProfilePage() {
     const dispatch = useDispatch();
 
-    const email = useSelector(store => store.userReducer.user.email)
-    const name = useSelector(store => store.userReducer.user.name)
+    const email = useSelector((store: IRootState) => store.userReducer.user.email)
+    const name = useSelector((store: IRootState) => store.userReducer.user.name)
 
-    const [hasChanges, setHasChanges] = useState(false);
-    const [hasNameInput, setHasNameInput] = useState(false);
+    const [hasChanges, setHasChanges] = useState<boolean>(false);
+    const [hasNameInput, setHasNameInput] = useState<boolean>(false);
 
-    const { values, handleChange, setValues } = useForm({
+    const { values, handleChange, setValues } = useForm<{
+        email: string;
+        name: string;
+        password: string;
+    }>({
         email: email,
         name: name,
         password: ''
     });
 
-    const inputRefName = useRef(null);
+    const inputRefName: MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(null);
 
     const onIconClickName = () => {
         setHasNameInput(true);
-        setTimeout(() => inputRefName.current.focus(), 0)
+        setTimeout(() => inputRefName.current?.focus(), 0)
     }
 
     useEffect(() => {
+
+        //TODO: When storage typed
+        // @ts-ignore
         dispatch(getUserInfo())
-            .catch((e) => { console.error(e); });
+            .catch((e: any) => { console.error(e); });
     }, [dispatch]);
 
     useEffect(() => {
@@ -40,10 +54,10 @@ export default function ProfilePage() {
         }
     }, [email, name]);
 
-    const handleProfile = (e) => {
+    const handleProfile = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const changedValues = {};
+        const changedValues: ProfileForm = {};
 
         if (values.email !== email) {
             changedValues.email = values.email;
@@ -56,6 +70,8 @@ export default function ProfilePage() {
         }
 
         if (Object.keys(changedValues).length > 0) {
+            //TODO: When storage typed
+            // @ts-ignore
             dispatch(updateUserInfo(JSON.stringify(changedValues)));
             setValues(prevValues => ({...prevValues, password: ''}))
         }
@@ -66,6 +82,8 @@ export default function ProfilePage() {
     }, [values.email, values.name, values.password, handleProfile]);
 
     const handleExit = () => {
+        //TODO: When storage typed
+        // @ts-ignore
         dispatch(logout(JSON.stringify({token: localStorage.getItem("refreshToken")})));
     }
 

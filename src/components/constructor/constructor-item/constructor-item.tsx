@@ -1,29 +1,33 @@
-import React, {useMemo, useRef} from 'react';
+import React, {FC, MutableRefObject, useMemo, useRef} from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { removeIngredientFromConstructor } from "../../../services/actions/ingredients";
 import styles from './constructor-item.module.css';
-import PropTypes from "prop-types";
-import ingredientType from "../../../utils/props/ingredient-types";
+import { Identifier } from 'dnd-core';
+import {DragItem, IConstructorItem} from "../types-constructor";
 
-export const ConstructorItem = ({ ingredient, index, moveIngredient }) => {
+export const ConstructorItem: FC<IConstructorItem> = ({ ingredient, index, moveIngredient }) => {
     const dispatch = useDispatch();
-    const ref = useRef(null);
+    const ref: MutableRefObject<null> = useRef(null);
 
-    const item = useMemo(() => ({ id: ingredient.uniqueId, index }), [ingredient.uniqueId, index]);
+    const item: DragItem = useMemo(() => ({ id: ingredient.uniqueId, index }), [ingredient.uniqueId, index]);
 
-    const [{ handlerId }, drop] = useDrop({
+    const [{ handlerId }, drop] = useDrop<
+        DragItem,
+        void,
+        { handlerId: Identifier | null }
+    >({
         accept: 'ingredientConstructor',
         collect: monitor => ({
             handlerId: monitor.getHandlerId(),
         }),
-        hover: (item, monitor) => {
+        hover: (item: DragItem, monitor) => {
             if (!ref.current) {
                 return;
             }
-            const dragIndex = item.index;
-            const hoverIndex = index;
+            const dragIndex: number = item.index;
+            const hoverIndex: number = index;
             if (dragIndex !== hoverIndex) {
                 moveIngredient(dragIndex, hoverIndex);
                 item.index = hoverIndex;
@@ -54,8 +58,3 @@ export const ConstructorItem = ({ ingredient, index, moveIngredient }) => {
     );
 };
 
-ConstructorItem.propTypes = {
-    ingredient: ingredientType,
-    index: PropTypes.number.isRequired,
-    moveIngredient: PropTypes.func.isRequired,
-};

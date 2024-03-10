@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FormEvent} from 'react';
 import {Button, EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {Link} from "react-router-dom";
 import styles from './forms.module.css';
@@ -12,15 +12,17 @@ export default function LoginPage() {
 
     const {values, handleChange} = useForm({email: "", password: ""});
 
-    const handleLogin = (e) => {
+    const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        // TODO: after storage typed
+        // @ts-ignore
         dispatch(login(JSON.stringify(values)));
     }
 
     return(
         <>
-            <main className={styles}>
+            <main>
                 <form name="login" className={styles.form} onSubmit={handleLogin}>
                     <h1 className={`text text_type_main-medium pb-6`}>Вход</h1>
                     <EmailInput

@@ -1,4 +1,4 @@
-import React from 'react';
+import {FormEvent, SyntheticEvent, useState} from 'react';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './forms.module.css';
 import {useForm} from "../hooks/useForm";
@@ -8,34 +8,41 @@ import {useDispatch} from "react-redux";
 export default function ResetPasswordPage() {
     const dispatch = useDispatch();
 
-    const [errorToken, setErrorToken] = React.useState('')
-    const [flag, setFlag] = React.useState(false)
+    const [errorToken, setErrorToken] = useState<string>('')
+    const [flag, setFlag] = useState<boolean>(false)
 
-    const {values, handleChange} = useForm({password: "", token: ""});
+    const {values, handleChange} = useForm<{password: string, token: string}>({password: "", token: ""});
 
-    const handleResetPassword = async e => {
+    const handleResetPassword = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const payload = JSON.stringify(values);
+
+        //TODO: When storage typed
+        // @ts-ignore
         dispatch(resetPassword(payload, setErrorToken, setFlag));
 
     }
 
-    const handleChangeEmail = (e) => {
+    const handleChangeEmail = (e: SyntheticEvent<Element, Event>) => {
         e.preventDefault();
 
+        //TODO: When storage typed
+        // @ts-ignore
         dispatch(changeForgotPasswordEmail());
     }
 
-    function handleRemindPassword(e) {
+    function handleRemindPassword(e: SyntheticEvent<Element, Event>) {
         e.preventDefault();
 
+        //TODO: When storage typed
+        // @ts-ignore
         dispatch(remindPassword());
     }
 
     return(
         <>
-            <main className={styles}>
+            <main>
                 <form name="reset-password" className={styles.form} onSubmit={handleResetPassword}>
                     <h1 className={`text text_type_main-medium pb-6`}>Восстановление пароля</h1>
                     <PasswordInput

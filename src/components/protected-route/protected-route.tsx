@@ -1,14 +1,45 @@
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
+import {FC, ReactElement} from "react";
 
-const ProtectedRoute = ({ onlyUnAuth = false, component }) => {
+
+// TODO: when storage done, change this int
+
+interface IRootState {
+    userReducer: {
+        user: {
+            email: string;
+        };
+        tokenChecked: boolean;
+        emailChecked: boolean;
+        resetPasswordSuccess: boolean;
+        resetPasswordEnd: boolean;
+    };
+}
+
+interface TProtectedRoute {
+    onlyUnAuth?: boolean;
+    component: ReactElement;
+}
+
+const ProtectedRoute: FC<TProtectedRoute> = ({ onlyUnAuth = false, component }) => {
     const location = useLocation();
 
-    const email = useSelector(store => store.userReducer.user.email) !== '';
-    const isAuthChecked = useSelector(store => store.userReducer.tokenChecked);
-    const isResetPasswordAllowed = useSelector(store => store.userReducer.emailChecked);
-    const isResetPasswordSuccess = useSelector(store => store.userReducer.resetPasswordSuccess);
-    const isResetPasswordEnd = useSelector(store => store.userReducer.resetPasswordEnd);
+    const email = useSelector(
+        (state: IRootState) => state.userReducer.user.email
+    ) !== '';
+    const isAuthChecked = useSelector(
+        (state: IRootState) => state.userReducer.tokenChecked
+    );
+    const isResetPasswordAllowed = useSelector(
+        (state: IRootState) => state.userReducer.emailChecked
+    );
+    const isResetPasswordSuccess = useSelector(
+        (state: IRootState) => state.userReducer.resetPasswordSuccess
+    );
+    const isResetPasswordEnd = useSelector(
+        (state: IRootState) => state.userReducer.resetPasswordEnd
+    );
 
     //TODO: Make loader
     if (!isAuthChecked) { return <>Загружаем данные</>; }
@@ -38,8 +69,8 @@ const ProtectedRoute = ({ onlyUnAuth = false, component }) => {
     return component;
 }
 
-export const OnlyAuth = ProtectedRoute;
+export const OnlyAuth: FC<TProtectedRoute> = ProtectedRoute;
 
-export const OnlyUnAuth = ({ component }) => (
+export const OnlyUnAuth: FC<TProtectedRoute> = ({ component }) => (
     <ProtectedRoute onlyUnAuth={true} component={component} />
 );
