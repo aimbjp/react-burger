@@ -21,7 +21,6 @@ export default function LoginPage() {
     }
 
     return(
-        <>
             <main>
                 <form name="login" className={styles.form} onSubmit={handleLogin}>
                     <h1 className={`text text_type_main-medium pb-6`}>Вход</h1>
@@ -62,6 +61,5 @@ export default function LoginPage() {
                     </section>
                 </form>
             </main>
-        </>
     );
 }

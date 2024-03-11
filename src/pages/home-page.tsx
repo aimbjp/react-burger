@@ -7,13 +7,11 @@ import styles from './home-page.module.css';
 
 export default function HomePage() {
     return (
-        <>
                 <DndProvider backend={HTML5Backend}>
                     <main className={styles.Home}>
                         <BurgerIngredients />
                         <BurgerConstructor />
                     </main>
                 </DndProvider>
-        </>
     );
 }

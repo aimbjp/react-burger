@@ -92,7 +92,6 @@ export default function ProfilePage() {
     }
 
     return(
-        <>
             <main className={`text text_type_main-default ${styles.profile_main}`}>
                 <section className={styles.menu}>
                     <nav className={`text_type_main-medium ${styles.navigation}`}>
@@ -169,6 +168,5 @@ export default function ProfilePage() {
                     }
                 </form>
             </main>
-        </>
     );
 }

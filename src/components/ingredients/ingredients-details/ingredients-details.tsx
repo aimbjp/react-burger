@@ -9,7 +9,6 @@ export default function IngredientsDetails () {
 
 
     return(
-        <>
             <section className={styles.details}>
             <img src={activeIngredient && activeIngredient.image_large} alt={activeIngredient && activeIngredient.name}/>
             <h3 className="text text_type_main-medium pt-4">{activeIngredient && activeIngredient.name}</h3>
@@ -48,6 +47,5 @@ export default function IngredientsDetails () {
                 </li>
             </ul>
         </section>
-        </>
     )
 }

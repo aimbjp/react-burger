@@ -42,7 +42,7 @@ const ProtectedRoute: FC<TProtectedRoute> = ({ onlyUnAuth = false, component }) 
     );
 
     //TODO: Make loader
-    if (!isAuthChecked) { return <>Загружаем данные</>; }
+    if (!isAuthChecked) { return <span>Загружаем данные</span>; }
 
 
     if (onlyUnAuth && email) {

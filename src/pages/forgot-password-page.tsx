@@ -22,7 +22,6 @@ const dispatch = useDispatch();
     }
 
     return(
-        <>
             <main>
                 <form name="forgot-password" className={styles.form} onSubmit={handleForgotPassword}>
                     <h1 className={`text text_type_main-medium pb-6`}>Восстановление пароля</h1>
@@ -49,6 +48,5 @@ const dispatch = useDispatch();
                     </section>
                 </form>
             </main>
-        </>
     );
 }

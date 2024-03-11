@@ -41,7 +41,6 @@ export default function ResetPasswordPage() {
     }
 
     return(
-        <>
             <main>
                 <form name="reset-password" className={styles.form} onSubmit={handleResetPassword}>
                     <h1 className={`text text_type_main-medium pb-6`}>Восстановление пароля</h1>
@@ -85,6 +84,5 @@ export default function ResetPasswordPage() {
                     </section>
                 </form>
             </main>
-        </>
     );
 }

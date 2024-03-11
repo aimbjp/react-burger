@@ -26,7 +26,6 @@ export default function RegisterPage() {
     }
 
     return(
-        <>
             <main>
                 <form name="register" className={styles.form} onSubmit={handleRegister}>
                     <h1 className={`text text_type_main-medium pb-6`}>Регистрация</h1>
@@ -36,14 +35,14 @@ export default function RegisterPage() {
                         onChange={handleChange}
                         value={values.name}
                         name={'name'}
-                        errorText={'Такой пользователь уже существует'}
+                        // errorText={'Такой пользователь уже существует'}
                         size={'default'}
                         extraClass="pb-6"
                     />
                     <EmailInput
                         value={values.email}
                         {...(isRegistered ? { error: 'Такой пользователь уже существует!!!!!' } : {})}
-                        errorText={'Такой пользователь уже существует'}
+                        // errorText={'Такой пользователь уже существует'}
                         name={'email'}
                         onChange={handleChange}
                         extraClass='pb-6'
@@ -69,6 +68,5 @@ export default function RegisterPage() {
                     </section>
                 </form>
             </main>
-        </>
     );
 }
