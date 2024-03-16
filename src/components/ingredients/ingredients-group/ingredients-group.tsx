@@ -1,17 +1,17 @@
-import React, {useMemo} from 'react';
-import PropTypes from 'prop-types';
+import React, {useMemo, forwardRef} from 'react';
 import IngredientCard from "../ingredients-card/ingredient-card";
 import styles from './ingredients-group.module.css';
 import {useSelector} from "react-redux";
+import {IIngredientsGroupProps} from "../types-ingredients";
+import {IIngredient, IRootState} from "../../constructor/types-constructor";
 
-function IngredientsGroup(props){
+const IngredientsGroup = forwardRef<HTMLDivElement, IIngredientsGroupProps>((props, ref) => {
+    const ingredients: IIngredient[] = useSelector((store: IRootState) => store.ingredientsReducer.ingredients);
 
-    const ingredients = useSelector(store => store.ingredientsReducer.ingredients);
-
-    const filtered = useMemo(() => ingredients.filter(item => item.type === props.type), [ingredients, props.type]);
+    const filtered: IIngredient[] = useMemo(() => ingredients.filter(item => item.type === props.type), [ingredients, props.type]);
 
     return(
-        <section className={`${styles.group} pt-10`}>
+        <section className={`${styles.group} pt-10`} ref={ref}>
             <h2 className={`text text_type_main-medium`}>{props.value}</h2>
             <div className={`${styles.ingredientList} pl-4 pt-6`}>
                 {filtered.map(item => (
@@ -27,12 +27,6 @@ function IngredientsGroup(props){
             </div>
         </section>
     );
-}
-
-IngredientsGroup.propTypes = {
-    value: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['bun', 'sauce', 'main']).isRequired,
-};
-
+});
 
 export default IngredientsGroup;

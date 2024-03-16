@@ -1,19 +1,20 @@
-import React, {useEffect, useState} from "react";
+import { FC, useEffect, useState } from "react";
 import { CurrencyIcon, Counter, } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient-card.module.css';
-import {useDispatch, useSelector} from "react-redux";
-import {useDrag} from "react-dnd";
-import {GET_ACTIVE_INGREDIENT} from "../../../services/actions/ingredients";
-import PropTypes from "prop-types";
-import {Link, useLocation} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrag} from "react-dnd";
+import { GET_ACTIVE_INGREDIENT } from "../../../services/actions/ingredients";
+import { Link, useLocation } from "react-router-dom";
+import { IRootState } from "../../constructor/types-constructor";
+import { IIngredientCardProps } from "../types-ingredients";
 
 
-function IngredientCard (props) {
+const IngredientCard: FC<IIngredientCardProps> = (props) => {
     const dispatch = useDispatch();
     const location = useLocation();
 
     const ingredientId = props.id;
-    const ingredients = useSelector(state => state.ingredientsReducer.ingredients);
+    const ingredients = useSelector((state: IRootState) => state.ingredientsReducer.ingredients);
 
 
     const handleCardClick = () => {
@@ -21,8 +22,8 @@ function IngredientCard (props) {
     };
 
     const [count, setCount] = useState(0);
-    const constructorIngredients = useSelector(state => state.ingredientsReducer.constructorIngredients.ingredients);
-    const constructorBun = useSelector(state => state.ingredientsReducer.constructorIngredients.bun);
+    const constructorIngredients = useSelector((state: IRootState) => state.ingredientsReducer.constructorIngredients.ingredients);
+    const constructorBun = useSelector((state: IRootState) => state.ingredientsReducer.constructorIngredients.bun);
 
     useEffect(() => {
         const newCount = constructorIngredients.filter(item => item._id === props.id).length + (constructorBun && constructorBun._id === props.id ? 2 : 0);
@@ -34,7 +35,7 @@ function IngredientCard (props) {
         type: 'ingredient',
         item: { id: props.id, type: props.type },
         collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
+            isDragging: monitor.isDragging(),
         }),
     }));
 
@@ -57,12 +58,5 @@ function IngredientCard (props) {
     )
 }
 
-IngredientCard.propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
-};
 
 export default IngredientCard;

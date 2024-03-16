@@ -21,7 +21,10 @@ function App() {
     };
 
     useEffect(() => {
+        //TODO: relates to storage
+        //@ts-ignore
         dispatch(getIngredients());
+        // @ts-ignore
         dispatch(checkUserAuth());
     }, [dispatch]);
 

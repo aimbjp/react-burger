@@ -12,9 +12,9 @@ import {
 } from "../../services/actions/ingredients";
 import {useDrop} from "react-dnd";
 import {useNavigate} from "react-router-dom";
+import {DragItem, IIngredient, IRootState} from "./types-constructor";
 
-
-function calculateCostOrder(bun, ingredients) {
+function calculateCostOrder(bun: IIngredient | null, ingredients: Array<IIngredient>) {
     const bunCost = bun ? bun.price * 2 : 0;
     const ingredientsCost = ingredients.length > 0 ? ingredients.reduce((acc, ing) => acc + ing.price, 0) : 0;
     return bunCost + ingredientsCost;
@@ -25,15 +25,16 @@ function BurgerConstructor(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const ingredients = useSelector(store => store.ingredientsReducer.ingredients);
-    const modalOpen = useSelector(store => store.ingredientsReducer.modalOrderOpen);
-    const chosenBun = useSelector(store => store.ingredientsReducer.constructorIngredients.bun); //0 or 7
-    const chosenIngredients = useSelector(store => store.ingredientsReducer.constructorIngredients.ingredients) ;
-    const email = useSelector(store => store.userReducer.user.email) !== '';
+    const ingredients = useSelector((store: IRootState) => store.ingredientsReducer.ingredients);
+    const modalOpen = useSelector((state: IRootState) => state.ingredientsReducer.modalOrderOpen);
+    const chosenBun = useSelector((state: IRootState) => state.ingredientsReducer.constructorIngredients.bun);
+    const chosenIngredients = useSelector((state: IRootState) => state.ingredientsReducer.constructorIngredients.ingredients);
+    const email = useSelector((state: IRootState) => state.userReducer.user.email) !== '';
+
     // const isAuthChecked = useSelector(store => store.userReducer.tokenChecked);
 
 
-    const costOrder = useMemo(()=> {
+    const costOrder: number = useMemo(() => {
         return calculateCostOrder(chosenBun, chosenIngredients)
     }, [chosenBun, chosenIngredients])
 
@@ -46,20 +47,21 @@ function BurgerConstructor(){
         }
 
         if (chosenIngredients.length && chosenBun) {
-            const chosenBunId = chosenBun._id;
-            const chosenIngredientsIds = chosenIngredients.map(ing => ing._id);
-            const ingredientsIdsArray = [chosenBunId, ...chosenIngredientsIds];
+            const chosenBunId: string = chosenBun._id;
+            const chosenIngredientsIds: string[] = chosenIngredients.map(ing => ing._id);
+            const ingredientsIdsArray: string[] = [chosenBunId, ...chosenIngredientsIds];
 
-            const orderDetails = JSON.stringify({ingredients: ingredientsIdsArray});
+            const orderDetails: string = JSON.stringify({ingredients: ingredientsIdsArray});
 
-
+            //TODO: remove ts ignore after type of store
+            // @ts-ignore
             dispatch(getOrder(orderDetails));
         }
         else {
             if (ingredients.length > 0 && chosenIngredients.length < 1) dispatch(addIngredientToConstructor(ingredients[1]));
 
             if (!chosenBun && ingredients.length > 0) {
-                const firstBun = ingredients.find(ingredient => ingredient.type === 'bun');
+                const firstBun: IIngredient | undefined = ingredients.find(ingredient => ingredient.type === 'bun');
                 if (firstBun) {
                     dispatch(addIngredientToConstructor(firstBun));
                 }
@@ -73,7 +75,7 @@ function BurgerConstructor(){
 
     const [, dropRef] = useDrop({
         accept: 'ingredient',
-        drop(item, monitor) {
+        drop(item: DragItem, monitor) {
             const ingredientToAdd = ingredients.find(ing => ing._id === item.id);
             if (ingredientToAdd) {
                 dispatch(addIngredientToConstructor(ingredientToAdd));

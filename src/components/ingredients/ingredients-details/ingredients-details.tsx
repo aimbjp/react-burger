@@ -1,14 +1,14 @@
 import styles from './ingredients-details.module.css';
 import { useSelector } from "react-redux";
 import {useParams} from "react-router-dom";
+import {IRootState} from "../../constructor/types-constructor";
 
 export default function IngredientsDetails () {
     let { ingredientId } = useParams();
-    const activeIngredient = useSelector(store => store.ingredientsReducer.ingredients).find(ing => ing._id === ingredientId);
+    const activeIngredient = useSelector((store: IRootState) => store.ingredientsReducer.ingredients).find(ing => ing._id === ingredientId);
 
 
     return(
-        <>
             <section className={styles.details}>
             <img src={activeIngredient && activeIngredient.image_large} alt={activeIngredient && activeIngredient.name}/>
             <h3 className="text text_type_main-medium pt-4">{activeIngredient && activeIngredient.name}</h3>
@@ -47,6 +47,5 @@ export default function IngredientsDetails () {
                 </li>
             </ul>
         </section>
-        </>
     )
 }
