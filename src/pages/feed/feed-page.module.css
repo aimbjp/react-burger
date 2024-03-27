@@ -1,0 +1,10 @@
+.feed_page{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 60px;
+}
+
+.header{
+    height: fit-content;
+}

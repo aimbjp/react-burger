@@ -1,31 +1,58 @@
+
+import {ActionUserType} from "../types/user";
+import {TUser} from "../types/model-data";
 import {
-    REGISTER,
-    REGISTER_FAILED,
-    REGISTER_SUCCESS,
-    GET_TOKEN,
-    GET_TOKEN_FAILED,
-    GET_TOKEN_SUCCESS,
-    LOGOUT,
-    LOGOUT_FAILED,
-    LOGOUT_SUCCESS,
     AUTHORIZATION,
     AUTHORIZATION_FAILED,
     AUTHORIZATION_SUCCESS,
+    CHANGE_FORGOT_PASSWORD_EMAIL,
+    CHECK_EMAIL_EXIST,
+    CHECK_EMAIL_EXIST_FAILED,
+    CHECK_EMAIL_EXIST_SUCCESS,
+    CHECK_USER_AUTH,
+    CHECK_USER_AUTH_FAILED,
+    CHECK_USER_AUTH_SUCCESS,
     GET_USER_INFO,
     GET_USER_INFO_FAILED,
     GET_USER_INFO_SUCCESS,
+    LOGOUT,
+    LOGOUT_FAILED,
+    LOGOUT_SUCCESS,
+    REGISTER,
+    REGISTER_FAILED,
+    REGISTER_SUCCESS, REMIND_PASSWORD, RESET_PASSWORD, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS,
     UPDATE_USER_INFO,
-    UPDATE_USER_INFO_SUCCESS,
     UPDATE_USER_INFO_FAILED,
-    RESET_PASSWORD,
-    RESET_PASSWORD_SUCCESS,
-    RESET_PASSWORD_FAILED,
-    CHECK_EMAIL_EXIST,
-    CHECK_EMAIL_EXIST_SUCCESS, CHECK_EMAIL_EXIST_FAILED,
-    CHANGE_FORGOT_PASSWORD_EMAIL, REMIND_PASSWORD
-} from "../actions/user";
+    UPDATE_USER_INFO_SUCCESS
+} from "../actions-types/user-types";
 
-const initialState = {
+
+interface IInitialState {
+    user: TUser;
+    register: boolean;
+    registerFailed: boolean;
+    authorization: boolean;
+    authorizationFailed: boolean;
+    logout: boolean;
+    logoutFailed: boolean;
+    getUserInfo: boolean;
+    getUserInfoFailed: boolean;
+    updateUser: boolean;
+    updateUserFailed: boolean;
+    token: boolean;
+    tokenFailed: boolean;
+    tokenChecked: boolean;
+    resetPassword: boolean;
+    resetPasswordFailed: boolean;
+    resetPasswordSuccess: boolean;
+    resetPasswordEnd: boolean;
+    checkEmailExist: boolean;
+    checkEmailExistFailed: boolean;
+    emailChecked: boolean;
+}
+
+
+const initialState:IInitialState = {
     user: {
         email: '',
         name: '',
@@ -61,7 +88,7 @@ const initialState = {
     emailChecked: false
 };
 
-export function userReducer (state = initialState, action)  {
+export function userReducer (state = initialState, action: ActionUserType)  {
     switch (action.type) {
         case REGISTER: {
             return {...state, register: true};
@@ -82,14 +109,13 @@ export function userReducer (state = initialState, action)  {
             }
         }
 
-        //TODO: change with CHECK_USER_AUTH etc.
-        case GET_TOKEN: {
+        case CHECK_USER_AUTH: {
             return {...state, }
         }
-        case GET_TOKEN_FAILED: {
+        case CHECK_USER_AUTH_FAILED: {
             return {...initialState, tokenFailed: true, tokenChecked: true}
         }
-        case GET_TOKEN_SUCCESS: {
+        case CHECK_USER_AUTH_SUCCESS: {
             return {...state, tokenFailed: false, tokenChecked: true}
         }
 

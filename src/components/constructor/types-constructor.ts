@@ -1,3 +1,5 @@
+import {TIngredient} from "../../services/types/model-data";
+
 export interface IIngredient {
     _id: string;
     name: string;
@@ -43,14 +45,8 @@ interface IUserReducerState {
     registerFailed: boolean;
 }
 
-export interface IRootState {
-    ingredientsReducer: IIngredientsReducerState;
-    userReducer: IUserReducerState;
-}
-
-
 export interface IConstructorItem {
-    ingredient: IIngredient;
+    ingredient: TIngredient;
     index: number;
     moveIngredient: (dragIndex: number, hoverIndex: number) => void;
 }

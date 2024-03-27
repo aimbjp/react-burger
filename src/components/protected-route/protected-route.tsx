@@ -1,21 +1,8 @@
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import {FC, ReactElement} from "react";
-
-
-// TODO: when storage done, change this int
-
-interface IRootState {
-    userReducer: {
-        user: {
-            email: string;
-        };
-        tokenChecked: boolean;
-        emailChecked: boolean;
-        resetPasswordSuccess: boolean;
-        resetPasswordEnd: boolean;
-    };
-}
+import {useSelector} from "../../services/hooks";
+import styleLoader from '../../utils/styles/loader.module.css';
+import {Loader} from "../elements";
 
 interface TProtectedRoute {
     onlyUnAuth?: boolean;
@@ -26,27 +13,28 @@ const ProtectedRoute: FC<TProtectedRoute> = ({ onlyUnAuth = false, component }) 
     const location = useLocation();
 
     const email = useSelector(
-        (state: IRootState) => state.userReducer.user.email
+        (state) => state.userReducer.user.email
     ) !== '';
     const isAuthChecked = useSelector(
-        (state: IRootState) => state.userReducer.tokenChecked
+        (state) => state.userReducer.tokenChecked
     );
     const isResetPasswordAllowed = useSelector(
-        (state: IRootState) => state.userReducer.emailChecked
+        (state) => state.userReducer.emailChecked
     );
     const isResetPasswordSuccess = useSelector(
-        (state: IRootState) => state.userReducer.resetPasswordSuccess
+        (state) => state.userReducer.resetPasswordSuccess
     );
     const isResetPasswordEnd = useSelector(
-        (state: IRootState) => state.userReducer.resetPasswordEnd
+        (state) => state.userReducer.resetPasswordEnd
     );
 
-    //TODO: Make loader
-    if (!isAuthChecked) { return <span>Загружаем данные</span>; }
+    if (!isAuthChecked) {
+        return (<Loader />);
+    }
 
 
     if (onlyUnAuth && email) {
-        const { from } = location.state || { from: { pathname: "/" } };
+        const {from} = location.state || {from: {pathname: "/"}};
         return <Navigate to={from} />;
     }
 

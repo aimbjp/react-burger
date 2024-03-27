@@ -2,10 +2,9 @@ import React, {FormEvent} from 'react';
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import styles from './forms.module.css';
-import { useForm } from "../hooks/useForm";
-import {useDispatch, useSelector} from "react-redux";
-import { register } from "../services/actions/user";
-import {IRootState} from "../components/constructor/types-constructor";
+import { useForm } from "../../hooks/useForm";
+import { register } from "../../services/thunk/user";
+import {useDispatch, useSelector} from "../../services/hooks";
 
 export default function RegisterPage() {
     const dispatch = useDispatch();
@@ -15,14 +14,12 @@ export default function RegisterPage() {
         name: string;
         password: string;
     }>({email: "", password: "", name: ""});
-    const isRegistered = useSelector( (store: IRootState) => store.userReducer.registerFailed);
+    const isRegistered = useSelector( (store) => store.userReducer.registerFailed);
 
     const handleRegister = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        //TODO: When storage typed
-        // @ts-ignore
-        dispatch(register(JSON.stringify(values)));
+        dispatch(register(values));
     }
 
     return(

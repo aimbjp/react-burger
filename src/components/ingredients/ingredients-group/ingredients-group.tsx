@@ -1,14 +1,14 @@
 import React, {useMemo, forwardRef} from 'react';
 import IngredientCard from "../ingredients-card/ingredient-card";
 import styles from './ingredients-group.module.css';
-import {useSelector} from "react-redux";
 import {IIngredientsGroupProps} from "../types-ingredients";
-import {IIngredient, IRootState} from "../../constructor/types-constructor";
+import {TIngredient} from "../../../services/types/model-data";
+import {useSelector} from "../../../services/hooks";
 
 const IngredientsGroup = forwardRef<HTMLDivElement, IIngredientsGroupProps>((props, ref) => {
-    const ingredients: IIngredient[] = useSelector((store: IRootState) => store.ingredientsReducer.ingredients);
+    const ingredients: TIngredient[] = useSelector((store) => store.ingredientsReducer.ingredients);
 
-    const filtered: IIngredient[] = useMemo(() => ingredients.filter(item => item.type === props.type), [ingredients, props.type]);
+    const filtered: TIngredient[] = useMemo(() => ingredients.filter(item => item.type === props.type), [ingredients, props.type]);
 
     return(
         <section className={`${styles.group} pt-10`} ref={ref}>

@@ -1,0 +1,21 @@
+.order{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.price{
+    display: flex;
+}
+
+.list{
+    height: 270px;
+    overflow: auto;
+}
+
+.summarize{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

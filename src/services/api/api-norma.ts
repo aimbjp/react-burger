@@ -1,4 +1,7 @@
+import {ILogin, IRegister} from "../thunk/types-auth";
+
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
+export const BURGER_ORDERS_WS_URL = 'wss://norma.nomoreparties.space/orders'
 
 const checkResponse = (res: Response): Promise<any> => {
     return res.ok ? res.json() : res.json().then((err: any) => Promise.reject(err));
@@ -15,8 +18,6 @@ export const refreshToken = () => {
         }),
     })
         .then(checkResponse)
-        // !! Важно для обновления токена в мидлваре, чтобы запись
-        // была тут, а не в fetchWithRefresh
         .then((refreshData) => {
             if (!refreshData.success) {
                 return Promise.reject(refreshData);
@@ -66,14 +67,14 @@ export const fetchIngredients = () => {
     return request(`/ingredients`);
 };
 
-export const fetchOrder = (orderDetails: string) =>{
+export const fetchOrder = (orderDetails: string[]) =>{
     return request(`/orders`, {
         method: 'POST',
         headers:{
             'Content-Type': 'application/json',
             authorization: localStorage.getItem('accessToken') || ''
         },
-        body: orderDetails,
+        body: JSON.stringify({ingredients: orderDetails}),
     });
 }
 
@@ -83,7 +84,7 @@ export const fetchForgotPassword = (email: string) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: email,
+        body: JSON.stringify({email}),
     })
 }
 
@@ -97,23 +98,23 @@ export const fetchResetPassword = (payload: string) => {
     })
 }
 
-export const fetchRegister = (payload: string) => {
+export const fetchRegister = (payload: IRegister) => {
     return request(`/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
-export const fetchLogin = (payload: string) => {
+export const fetchLogin = (payload: ILogin) => {
     return request(`/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: payload,
+        body: JSON.stringify(payload),
     })
 }
 
@@ -145,5 +146,14 @@ export const fetchUpdateUserInfo = (payload: string) => {
             'authorization': localStorage.getItem('accessToken') || '',
         },
         body: payload,
+    })
+}
+
+export const fetchGetOrder = (orderNumber: string) => {
+    return request(`/orders/${orderNumber}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
 }

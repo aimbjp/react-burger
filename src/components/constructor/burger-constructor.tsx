@@ -4,32 +4,30 @@ import ConstructorList from "./constructor-list/constructor-list";
 import styles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import ConstructorOfferInfo from "./constructer-offer-info/constructor-offer-info";
-import { useDispatch, useSelector } from "react-redux";
 import {
     addIngredientToConstructor,
-    COLLAPSE_ORDER,
     getOrder,
-} from "../../services/actions/ingredients";
+} from "../../services/thunk/ingredients";
 import {useDrop} from "react-dnd";
 import {useNavigate} from "react-router-dom";
-import {DragItem, IIngredient, IRootState} from "./types-constructor";
+import {DragItem} from "./types-constructor";
+import {COLLAPSE_ORDER} from "../../services/actions-types/ingredient-types";
+import {useDispatch, useSelector} from "../../services/hooks";
+import {TIngredient} from "../../services/types/model-data";
+import {calculateCostOrder} from "../../utils/functions/order";
 
-function calculateCostOrder(bun: IIngredient | null, ingredients: Array<IIngredient>) {
-    const bunCost = bun ? bun.price * 2 : 0;
-    const ingredientsCost = ingredients.length > 0 ? ingredients.reduce((acc, ing) => acc + ing.price, 0) : 0;
-    return bunCost + ingredientsCost;
-}
+
 
 function BurgerConstructor(){
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const ingredients = useSelector((store: IRootState) => store.ingredientsReducer.ingredients);
-    const modalOpen = useSelector((state: IRootState) => state.ingredientsReducer.modalOrderOpen);
-    const chosenBun = useSelector((state: IRootState) => state.ingredientsReducer.constructorIngredients.bun);
-    const chosenIngredients = useSelector((state: IRootState) => state.ingredientsReducer.constructorIngredients.ingredients);
-    const email = useSelector((state: IRootState) => state.userReducer.user.email) !== '';
+    const ingredients = useSelector((store) => store.ingredientsReducer.ingredients);
+    const modalOpen = useSelector((state) => state.ingredientsReducer.modalOrderOpen);
+    const chosenBun = useSelector((state) => state.ingredientsReducer.constructorIngredients.bun);
+    const chosenIngredients = useSelector((state) => state.ingredientsReducer.constructorIngredients.ingredients);
+    const email = useSelector((state) => state.userReducer.user.email) !== '';
 
     // const isAuthChecked = useSelector(store => store.userReducer.tokenChecked);
 
@@ -53,15 +51,13 @@ function BurgerConstructor(){
 
             const orderDetails: string = JSON.stringify({ingredients: ingredientsIdsArray});
 
-            //TODO: remove ts ignore after type of store
-            // @ts-ignore
-            dispatch(getOrder(orderDetails));
+            dispatch(getOrder(ingredientsIdsArray));
         }
         else {
             if (ingredients.length > 0 && chosenIngredients.length < 1) dispatch(addIngredientToConstructor(ingredients[1]));
 
             if (!chosenBun && ingredients.length > 0) {
-                const firstBun: IIngredient | undefined = ingredients.find(ingredient => ingredient.type === 'bun');
+                const firstBun: TIngredient | undefined = ingredients.find(ingredient => ingredient.type === 'bun');
                 if (firstBun) {
                     dispatch(addIngredientToConstructor(firstBun));
                 }

@@ -4,9 +4,31 @@ import {
     GET_ORDER_FAILED, GET_ORDER_REQUEST, GET_ORDER_SUCCESS, COLLAPSE_ORDER,
     ADD_INGREDIENT_TO_CONSTRUCTOR, REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
     ADD_BUN_TO_CONSTRUCTOR, MOVE_CONSTRUCTOR_INGREDIENT
-} from '../actions/ingredients';
+} from '../actions-types/ingredient-types';
+import {TIngredient, TOrderDetails} from "../types/model-data";
+import {ActionIngredientType} from "../types/ingredients";
 
-const initialState = {
+export interface IInitialState {
+    ingredients: TIngredient[];
+    ingredientsRequest: boolean;
+    ingredientsRequestFailed: boolean;
+
+    constructorIngredients: {
+        bun: TIngredient | null;
+        ingredients: TIngredient[];
+    };
+
+    activeIngredient: TIngredient | null;
+    modalIngredientOpen: boolean;
+
+    order: TOrderDetails | null;
+    orderRequest: boolean;
+    orderRequestFailed: boolean;
+    modalOrderOpen: boolean;
+}
+
+
+const initialState: IInitialState = {
     ingredients: [],
     ingredientsRequest: false,
     ingredientsRequestFailed: false,
@@ -26,7 +48,7 @@ const initialState = {
 
 };
 
-export function ingredientsReducer(state = initialState, action) {
+export function ingredientsReducer(state = initialState, action: ActionIngredientType) {
     switch (action.type) {
         case GET_INGREDIENTS_REQUEST: {
             return {

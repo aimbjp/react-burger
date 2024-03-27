@@ -1,0 +1,31 @@
+.feed_list{
+    display: grid;
+    width: 608px;
+}
+
+.feed_list_container{
+    width: 584px;
+    height: 70vh;
+    overflow: auto;
+    align-items: center;
+    list-style: none;
+    display: grid;
+    gap: 16px;
+}
+
+.list {
+    text-decoration: none;
+}
+
+.board {
+    display: flex;
+}
+
+.column {
+    flex: 1;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}

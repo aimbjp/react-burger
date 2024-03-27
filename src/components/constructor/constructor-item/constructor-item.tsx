@@ -1,11 +1,11 @@
 import React, {FC, MutableRefObject, useMemo, useRef} from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { removeIngredientFromConstructor } from "../../../services/actions/ingredients";
+import { removeIngredientFromConstructor } from "../../../services/thunk/ingredients";
 import styles from './constructor-item.module.css';
 import { Identifier } from 'dnd-core';
 import {DragItem, IConstructorItem} from "../types-constructor";
+import {useDispatch} from "../../../services/hooks";
 
 export const ConstructorItem: FC<IConstructorItem> = ({ ingredient, index, moveIngredient }) => {
     const dispatch = useDispatch();
@@ -52,7 +52,7 @@ export const ConstructorItem: FC<IConstructorItem> = ({ ingredient, index, moveI
                 text={ingredient.name}
                 price={ingredient.price}
                 thumbnail={ingredient.image}
-                handleClose={() => dispatch(removeIngredientFromConstructor(ingredient.uniqueId))}
+                handleClose={() => dispatch(removeIngredientFromConstructor(ingredient.uniqueId || ''))}
             />
         </div>
     );
