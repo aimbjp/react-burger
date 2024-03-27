@@ -1,0 +1,83 @@
+.itemIconsContainer {
+    position: relative;
+    height: 64px;
+}
+
+.iconContainer {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.iconContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.icon-1 {
+    top: 0;
+    left: 0;
+    z-index: 10;
+    border: 2px solid #5f3ae3;
+    background-color: #141318;
+}
+
+.icon-2 {
+    left: 48px;
+    z-index: 9;
+    border: 2px solid #5f3ae3;
+    background-color: #141318;
+
+}
+
+.icon-3 {
+    z-index: 8;
+    left: 96px;
+    border: 2px solid #5f3ae3;
+    background-color: #141318;
+}
+
+.icon-4 {
+    z-index: 7;
+    left: 144px;
+    border: 2px solid #5f3ae3;
+    background-color: #141318;
+}
+
+.icon-5 {
+    z-index: 6;
+    left: 192px;
+    border: 2px solid #5f3ae3;
+    background-color: #141318;
+}
+
+.remainingIcon {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    left: 240px;
+    border-radius: 100px;
+    border: 2px solid purple;
+    overflow: hidden;
+}
+
+.remainingIcon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.remainingCount {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 29px;
+    font-weight: bold;
+}
+

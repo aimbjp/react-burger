@@ -1,0 +1,23 @@
+.item{
+    display: flex;
+    gap: 16px;
+    height: 64px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.item img {
+    width: 64px;
+    height: 64px;
+    border-radius: 100px ;
+    border: 2px solid #5f3ae3; /* Добавляем бордер толщиной 2 пикселя цвета фиолетового */
+    background-color: #141318;
+    object-fit: cover;
+    overflow: hidden; /* Обрезаем содержимое, чтобы оно не выходило за пределы круга */
+
+}
+
+.price {
+    display: flex;
+    gap: 3px;
+}
