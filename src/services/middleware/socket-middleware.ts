@@ -19,7 +19,7 @@ export const socketMiddleware = (wsActions: TWSStoreActions, withTokenRefresh: b
                 onError,
                 onMessage
             } = wsActions;
-            if (type === wsInit && localStorage.getItem('accessToken')) {
+            if (type === wsInit) {
                 socket = new WebSocket(action.payload);//`${wsUrl}?token=${localStorage.getItem('accessToken')}`);
             }
             if (socket) {

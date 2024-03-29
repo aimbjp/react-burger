@@ -63,10 +63,9 @@ function App() {
                     <Route
                         path='/feed/:id'
                         element={
-                            <Modal title="Заказ" onClose={handleCloseModal}>
-                                <Order />
-                            </Modal>
-                        }
+                        <Modal title="Заказ" onClose={handleCloseModal}>
+                            <Order />
+                        </Modal>}
                     />
                 </Routes>
             )}
@@ -75,9 +74,11 @@ function App() {
                     <Route
                         path='/profile/orders/:id'
                         element={
-                            <Modal title="Заказ" onClose={handleCloseModal}>
-                                <Order />
-                            </Modal>
+                            <OnlyAuth component={
+                                <Modal title="Заказ" onClose={handleCloseModal}>
+                                    <Order />
+                                </Modal>
+                            }/>
                         }
                     />
                 </Routes>
