@@ -103,6 +103,8 @@ export function ProfileMain () {
                 onIconClick={onIconClickName}
                 disabled={!hasNameInput}
                 onBlur={() => setHasNameInput(false)}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
             />
             <EmailInput
                 value={values.email}

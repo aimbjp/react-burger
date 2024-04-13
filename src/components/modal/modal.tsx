@@ -40,7 +40,10 @@ const Modal: FC<TModal> = ({ title, children, onClose }) => {
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={`${styles.header} pr-10 pl-10`}>
                     <h1 className="text text_type_main-large">{title}</h1>
+                    <span data-testid="modal-close">
                     <CloseIcon type="primary" onClick={handleCloseClick} />
+
+                    </span>
                 </div>
                 <div className={styles.content}>
                     {children}

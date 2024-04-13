@@ -80,7 +80,7 @@ function BurgerConstructor(){
     });
 
     return(
-        <section className={`${styles.burgerConstructor} pt-25 pb-10`} ref={dropRef}>
+        <section className={`${styles.burgerConstructor} pt-25 pb-10`} ref={dropRef} data-testid="constructor-area">
             {(chosenBun
                 && <ConstructorElement
                 type="top"
@@ -110,7 +110,7 @@ function BurgerConstructor(){
                     <p className="text text_type_digits-medium">{costOrder}</p>
                     <CurrencyIcon type="primary" />
                 </span>
-                <Button htmlType="button" type="primary" size="large" onClick={handleOfferClick}>
+                <Button htmlType="button" type="primary" size="large" onClick={handleOfferClick} data-testid="order-button">
                     Оформить заказ
                 </Button>
             </section>

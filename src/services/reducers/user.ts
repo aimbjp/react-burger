@@ -1,4 +1,3 @@
-
 import {ActionUserType} from "../types/user";
 import {TUser} from "../types/model-data";
 import {
@@ -52,7 +51,7 @@ interface IInitialState {
 }
 
 
-const initialState:IInitialState = {
+export const initialState:IInitialState = {
     user: {
         email: '',
         name: '',
