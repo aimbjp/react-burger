@@ -1,9 +1,9 @@
 import {FormEvent, SyntheticEvent, useState} from 'react';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './forms.module.css';
-import {useForm} from "../hooks/useForm";
-import {changeForgotPasswordEmail, remindPassword, resetPassword} from "../services/actions/user";
-import {useDispatch} from "react-redux";
+import {useForm} from "../../hooks/useForm";
+import {changeForgotPasswordEmail, remindPassword, resetPassword} from "../../services/thunk/user";
+import {useDispatch} from "../../services/hooks";
 
 export default function ResetPasswordPage() {
     const dispatch = useDispatch();
@@ -18,8 +18,6 @@ export default function ResetPasswordPage() {
 
         const payload = JSON.stringify(values);
 
-        //TODO: When storage typed
-        // @ts-ignore
         dispatch(resetPassword(payload, setErrorToken, setFlag));
 
     }
@@ -27,16 +25,12 @@ export default function ResetPasswordPage() {
     const handleChangeEmail = (e: SyntheticEvent<Element, Event>) => {
         e.preventDefault();
 
-        //TODO: When storage typed
-        // @ts-ignore
         dispatch(changeForgotPasswordEmail());
     }
 
     function handleRemindPassword(e: SyntheticEvent<Element, Event>) {
         e.preventDefault();
 
-        //TODO: When storage typed
-        // @ts-ignore
         dispatch(remindPassword());
     }
 

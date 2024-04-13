@@ -1,26 +1,23 @@
-import {fetchIngredients, fetchOrder} from "../api/api-norma";
+import { fetchIngredients, fetchOrder } from "../api/api-norma";
 import { v4 as uuidv4 } from 'uuid';
+import {
+    ADD_BUN_TO_CONSTRUCTOR,
+    ADD_INGREDIENT_TO_CONSTRUCTOR,
+    GET_INGREDIENTS_FAILED,
+    GET_INGREDIENTS_REQUEST,
+    GET_INGREDIENTS_SUCCESS,
+    GET_ORDER_FAILED,
+    GET_ORDER_REQUEST,
+    GET_ORDER_SUCCESS,
+    MOVE_CONSTRUCTOR_INGREDIENT,
+    REMOVE_INGREDIENT_FROM_CONSTRUCTOR
+} from "../actions-types/ingredient-types";
+import {AppDispatch, AppThunkAction, RootState} from "../types";
+import {TIngredient, TOrderDetails} from "../types/model-data";
 
-export const GET_INGREDIENTS_REQUEST = 'REQUEST_INGREDIENTS';
-export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
-export const GET_INGREDIENTS_FAILED = 'GET_INGREDIENTS_FAILED';
 
-export const GET_ACTIVE_INGREDIENT = 'GET_ACTIVE_INGREDIENT';
-export const COLLAPSE_ACTIVE_INGREDIENT = 'COLLAPSE_ACTIVE_INGREDIENT';
-
-export const ADD_INGREDIENT_TO_CONSTRUCTOR = 'ADD_INGREDIENT_TO_CONSTRUCTOR';
-export const ADD_BUN_TO_CONSTRUCTOR = 'ADD_BUN_TO_CONSTRUCTOR';
-export const REMOVE_INGREDIENT_FROM_CONSTRUCTOR = 'REMOVE_INGREDIENT_FROM_CONSTRUCTOR';
-
-export const GET_ORDER_SUCCESS = 'GET_ORDER_SUCCESS';
-export const GET_ORDER_REQUEST = 'GET_ORDER_REQUEST';
-export const GET_ORDER_FAILED = 'GET_ORDER_FAILED';
-export const COLLAPSE_ORDER = 'COLLAPSE_ORDER';
-
-export const MOVE_CONSTRUCTOR_INGREDIENT = 'MOVE_CONSTRUCTOR_INGREDIENT';
-
-export function getIngredients() {
-    return function(dispatch) {
+export function getIngredients(): AppThunkAction {
+    return function(dispatch: AppDispatch) {
         dispatch({
             type: GET_INGREDIENTS_REQUEST
         });
@@ -41,8 +38,8 @@ export function getIngredients() {
     };
 }
 
-export function getOrder(orderDetails){
-    return function(dispatch) {
+export function getOrder(orderDetails: string[]): AppThunkAction {
+    return function(dispatch: AppDispatch) {
         dispatch({
             type: GET_ORDER_REQUEST
         });
@@ -63,37 +60,34 @@ export function getOrder(orderDetails){
     };
 }
 
-export function addIngredientToConstructor(ingredient) {
+export const addIngredientToConstructor = (ingredient: TIngredient): AppThunkAction => (dispatch: AppDispatch) => {
     if (ingredient.type === 'bun') {
-        return {
+        dispatch({
             type: ADD_BUN_TO_CONSTRUCTOR,
             bun: ingredient,
-        };
+        });
     } else {
-        return {
+        const uniqueId = uuidv4();
+        dispatch({
             type: ADD_INGREDIENT_TO_CONSTRUCTOR,
             ingredient: {
                 ...ingredient,
-                uniqueId: uuidv4(),
+                uniqueId,
             },
-        };
+        });
     }
-}
-
-export function removeIngredientFromConstructor(uniqueId) {
-    return {
-        type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
-        payload: uniqueId,
-    };
-}
-
-
-export const moveConstructorIngredient = (dragIndex, hoverIndex) => {
-    return {
-        type: MOVE_CONSTRUCTOR_INGREDIENT,
-        payload: { dragIndex, hoverIndex }
-    };
 };
 
+export const removeIngredientFromConstructor = (uniqueId: string): AppThunkAction => (dispatch: AppDispatch) => {
+    dispatch({
+        type: REMOVE_INGREDIENT_FROM_CONSTRUCTOR,
+        payload: uniqueId,
+    });
+};
 
-
+export const moveConstructorIngredient = (dragIndex: number, hoverIndex: number): AppThunkAction => (dispatch: AppDispatch) => {
+    dispatch({
+        type: MOVE_CONSTRUCTOR_INGREDIENT,
+        payload: { dragIndex, hoverIndex }
+    });
+};

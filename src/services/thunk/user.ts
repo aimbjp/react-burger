@@ -6,46 +6,40 @@ import {
     fetchRegister, fetchResetPassword,
     fetchUpdateUserInfo
 } from "../api/api-norma";
-
-export const GET_TOKEN = 'GET_TOKEN';
-export const GET_TOKEN_SUCCESS = 'GET_TOKEN_SUCCESS';
-export const GET_TOKEN_FAILED = 'GET_TOKEN_FAILED';
-
-export const LOGOUT = 'LOGOUT';
-export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
-export const LOGOUT_FAILED = 'LOGOUT_FAILED';
-
-export const REGISTER = 'REGISTER';
-export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const REGISTER_FAILED = 'REGISTER_FAILED';
-
-export const AUTHORIZATION = 'AUTHORIZATION';
-export const AUTHORIZATION_SUCCESS = 'AUTHORIZATION_SUCCESS';
-export const AUTHORIZATION_FAILED = 'AUTHORIZATION_FAILED';
-
-export const RESET_PASSWORD = 'RESET_PASSWORD';
-export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS';
-export const RESET_PASSWORD_FAILED = 'RESET_PASSWORD_FAILED';
-
-export const CHECK_EMAIL_EXIST = 'CHECK_EMAIL_EXIST';
-export const CHECK_EMAIL_EXIST_SUCCESS = 'CHECK_EMAIL_EXIST_SUCCESS';
-export const CHECK_EMAIL_EXIST_FAILED = 'CHECK_EMAIL_EXIST_FAILED';
-
-export const GET_USER_INFO = 'GET_USER_INFO';
-export const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS';
-export const GET_USER_INFO_FAILED = 'GET_USER_INFO_FAILED';
-
-export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
-export const UPDATE_USER_INFO_SUCCESS = 'UPDATE_USER_INFO_SUCCESS';
-export const UPDATE_USER_INFO_FAILED = 'UPDATE_USER_INFO_FAILED';
-
-export const CHANGE_FORGOT_PASSWORD_EMAIL = 'FORGOT_PASSWORD_CHANGE_EMAIL';
-
-export const REMIND_PASSWORD = 'REMIND_PASSWORD';
+import {
+    AUTHORIZATION,
+    AUTHORIZATION_FAILED,
+    AUTHORIZATION_SUCCESS,
+    CHANGE_FORGOT_PASSWORD_EMAIL,
+    CHECK_EMAIL_EXIST,
+    CHECK_EMAIL_EXIST_FAILED,
+    CHECK_EMAIL_EXIST_SUCCESS,
+    CHECK_USER_AUTH,
+    CHECK_USER_AUTH_FAILED,
+    CHECK_USER_AUTH_SUCCESS,
+    GET_USER_INFO,
+    GET_USER_INFO_FAILED,
+    GET_USER_INFO_SUCCESS,
+    LOGOUT,
+    LOGOUT_FAILED,
+    LOGOUT_SUCCESS,
+    REGISTER,
+    REGISTER_FAILED,
+    REGISTER_SUCCESS, REMIND_PASSWORD,
+    RESET_PASSWORD,
+    RESET_PASSWORD_FAILED,
+    RESET_PASSWORD_SUCCESS,
+    UPDATE_USER_INFO,
+    UPDATE_USER_INFO_FAILED,
+    UPDATE_USER_INFO_SUCCESS
+} from "../actions-types/user-types";
+import {AppDispatch, AppThunkAction} from "../types";
+import {ILogin, IRegister} from "./types-auth";
 
 
-export function register (payload) {
-    return function (dispatch) {
+
+export function register (payload: IRegister) : AppThunkAction{
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: REGISTER,
         });
@@ -72,8 +66,8 @@ export function register (payload) {
     }
 }
 
-export function login (payload) {
-    return function (dispatch) {
+export function login (payload: ILogin): AppThunkAction {
+    return function (dispatch: AppDispatch) {
         dispatch({type: AUTHORIZATION});
         fetchLogin(payload)
             .then(res => {
@@ -97,8 +91,8 @@ export function login (payload) {
     }
 }
 
-export function logout(payload) {
-    return (dispatch) => {
+export function logout(payload: string): AppThunkAction {
+    return (dispatch: AppDispatch) => {
         dispatch({type: LOGOUT});
         fetchLogout(payload)
             .then(res => {
@@ -118,8 +112,8 @@ export function logout(payload) {
     }
 }
 
-export function getUserInfo () {
-    return async (dispatch) => {
+export function getUserInfo (): AppThunkAction {
+    return async (dispatch: AppDispatch) => {
         dispatch({type: GET_USER_INFO});
 
         try {
@@ -140,8 +134,8 @@ export function getUserInfo () {
     }
 }
 
-export function updateUserInfo (payload) {
-    return (dispatch) => {
+export function updateUserInfo (payload: string): AppThunkAction {
+    return (dispatch: AppDispatch) => {
         dispatch({type: UPDATE_USER_INFO});
 
         fetchUpdateUserInfo(payload)
@@ -161,25 +155,31 @@ export function updateUserInfo (payload) {
 }
 
 
-export const checkUserAuth = () => {
-    return (dispatch) => {
-        dispatch({type: GET_TOKEN});
+export const checkUserAuth = (): AppThunkAction => {
+    return async (dispatch: AppDispatch) => {
+        dispatch({ type: CHECK_USER_AUTH });
 
-        if (localStorage.getItem('accessToken')){
-            dispatch(getUserInfo())
-                .catch(() => {
-                    localStorage.removeItem("refreshToken");
-                    localStorage.removeItem("accessToken");
-                    dispatch({type: GET_TOKEN_FAILED});
-                })
-                .finally(() => {dispatch({type: GET_TOKEN_SUCCESS});});
-        } else {
-            dispatch({type: GET_TOKEN_SUCCESS});
+        try {
+            if (localStorage.getItem('accessToken')) {
+                dispatch(getUserInfo());
+                dispatch({ type: CHECK_USER_AUTH_SUCCESS });
+            } else {
+                dispatch({ type: CHECK_USER_AUTH_SUCCESS });
+            }
+        } catch (error) {
+            console.error('Ошибка при проверке авторизации: ', error);
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("accessToken");
+            dispatch({ type: CHECK_USER_AUTH_FAILED });
         }
     }
 }
 
-export const resetPassword = (payload, setErrorToken, setFlag) => async (dispatch) => {
+
+export const resetPassword = (payload: string,
+                              setErrorToken: React.Dispatch<React.SetStateAction<string>>,
+                              setFlag: React.Dispatch<React.SetStateAction<boolean>>
+): AppThunkAction => async (dispatch) => {
     try {
         dispatch({type: RESET_PASSWORD})
 
@@ -192,7 +192,7 @@ export const resetPassword = (payload, setErrorToken, setFlag) => async (dispatc
             setFlag(true);
             dispatch({type: RESET_PASSWORD_FAILED});
         }
-    } catch (e) {
+    } catch (e: any) {
         console.error('error: ', e.message);
         setErrorToken('Неверный код подтверждения');
         setFlag(true);
@@ -200,8 +200,8 @@ export const resetPassword = (payload, setErrorToken, setFlag) => async (dispatc
     }
 };
 
-export const checkEmailExist = (email) => {
-    return (dispatch) => {
+export const checkEmailExist = (email: string): AppThunkAction => {
+    return (dispatch: AppDispatch) => {
         dispatch({type: CHECK_EMAIL_EXIST});
 
         fetchForgotPassword(email)
@@ -220,14 +220,14 @@ export const checkEmailExist = (email) => {
     }
 }
 
-export const changeForgotPasswordEmail = () => {
-    return (dispatch) => {
+export const changeForgotPasswordEmail = (): AppThunkAction => {
+    return (dispatch: AppDispatch) => {
         dispatch({type: CHANGE_FORGOT_PASSWORD_EMAIL})
     }
 }
 
-export const remindPassword = () => {
-    return (dispatch) => {
+export const remindPassword = (): AppThunkAction => {
+    return (dispatch: AppDispatch) => {
         dispatch({type: REMIND_PASSWORD})
     }
 }

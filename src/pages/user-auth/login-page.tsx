@@ -2,9 +2,9 @@ import React, {FormEvent} from 'react';
 import {Button, EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {Link} from "react-router-dom";
 import styles from './forms.module.css';
-import {useForm} from "../hooks/useForm";
-import {useDispatch} from "react-redux";
-import { login } from "../services/actions/user";
+import {useForm} from "../../hooks/useForm";
+import { login } from "../../services/thunk/user";
+import {useDispatch} from "../../services/hooks";
 
 export default function LoginPage() {
     const dispatch = useDispatch();
@@ -15,9 +15,7 @@ export default function LoginPage() {
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // TODO: after storage typed
-        // @ts-ignore
-        dispatch(login(JSON.stringify(values)));
+        dispatch(login(values));
     }
 
     return(

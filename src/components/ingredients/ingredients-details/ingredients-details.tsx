@@ -1,11 +1,10 @@
 import styles from './ingredients-details.module.css';
-import { useSelector } from "react-redux";
 import {useParams} from "react-router-dom";
-import {IRootState} from "../../constructor/types-constructor";
+import {useSelector} from "../../../services/hooks";
 
 export default function IngredientsDetails () {
     let { ingredientId } = useParams();
-    const activeIngredient = useSelector((store: IRootState) => store.ingredientsReducer.ingredients).find(ing => ing._id === ingredientId);
+    const activeIngredient = useSelector((store) => store.ingredientsReducer.ingredients).find(ing => ing._id === ingredientId);
 
 
     return(

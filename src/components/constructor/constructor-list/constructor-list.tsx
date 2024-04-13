@@ -1,16 +1,17 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { moveConstructorIngredient } from "../../../services/actions/ingredients";
+import { moveConstructorIngredient } from "../../../services/thunk/ingredients";
 import styles from './constructor-list.module.css';
 import { ConstructorItem } from '../constructor-item/constructor-item';
-import {IIngredient, IRootState} from "../types-constructor";
+import {useDispatch , useSelector } from "../../../services/hooks";
+import {TIngredient} from "../../../services/types/model-data";
 
 
 
 function ConstructorList() {
     const dispatch = useDispatch();
 
-    const chosenIngredients: IIngredient[] = useSelector((store: IRootState) => store.ingredientsReducer.constructorIngredients.ingredients);
+    // const chosenIngredients: IIngredient[] = useSelector((store) => store.ingredientsReducer.constructorIngredients.ingredients);
+    const chosenIngredients: TIngredient[] = useSelector((store) => store.ingredientsReducer.constructorIngredients.ingredients);
 
     const moveIngredient = (dragIndex: number, hoverIndex: number) => {
         dispatch(moveConstructorIngredient(dragIndex, hoverIndex));

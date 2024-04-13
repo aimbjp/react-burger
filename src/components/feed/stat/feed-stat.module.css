@@ -1,0 +1,41 @@
+.stat{
+    display: grid;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.boards{
+    display: flex;
+    gap: 36px;
+    justify-content: space-between;
+}
+
+.digits__shadow{
+    text-shadow: 4px 3px 50px rgba(76, 76, 176, 0.8);
+}
+
+.board{
+    display: grid;
+}
+
+.item {
+    list-style: none;
+}
+
+.list {
+    text-decoration: none;
+}
+
+.board_desk {
+    display: flex;
+    gap: 3vw;
+}
+
+.column {
+    flex: 1;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
