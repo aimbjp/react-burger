@@ -30,7 +30,7 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "cypress:open": "cypress open"
+    "cypress:open": "npx cypress open"
   },
   "eslintConfig": {
     "extends": [
