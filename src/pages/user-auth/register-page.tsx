@@ -34,7 +34,8 @@ export default function RegisterPage() {
                         name={'name'}
                         // errorText={'Такой пользователь уже существует'}
                         size={'default'}
-                        extraClass="pb-6"
+                        extraClass="pb-6" onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                     <EmailInput
                         value={values.email}

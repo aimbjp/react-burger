@@ -55,6 +55,8 @@ export default function ResetPasswordPage() {
                         size={'default'}
                         extraClass="pb-6"
                         error={flag}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
                     />
                     <Button htmlType="submit" type="primary" size="large">
                         Сохранить

@@ -18,9 +18,9 @@ function ConstructorList() {
     };
 
     return (
-        <section className={`${styles.list} custom-scroll`}>
+        <section className={`${styles.list} custom-scroll`} >
             {chosenIngredients.map((ingredient, index) => (
-                <ConstructorItem key={ingredient.uniqueId} ingredient={ingredient} index={index} moveIngredient={moveIngredient} />
+                <ConstructorItem data-testid="constructor-item" key={ingredient.uniqueId} ingredient={ingredient} index={index} moveIngredient={moveIngredient} />
             ))}
         </section>
     );

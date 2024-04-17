@@ -39,7 +39,7 @@ const IngredientCard: FC<IIngredientCardProps> = (props) => {
     }));
 
     return(
-        <Link key={ingredientId} to={`/ingredients/${ingredientId}`} state={ { background: location } } className={` text text_color_primary ${styles.list} `}>
+        <Link key={ingredientId} to={`/ingredients/${ingredientId}`} state={ { background: location } } className={` text text_color_primary ${styles.list} `} data-testid="ingredient-draggable">
             <section className={styles.card} onClick={handleCardClick} ref={dragRef}>
                 <img src={props.image} className={`pl-4 pr-4`} alt={props.name} />
                 <p className={`text text_type_digits-default ${styles.price} pb-1 pt-1`}>
